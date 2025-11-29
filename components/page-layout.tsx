@@ -1,11 +1,18 @@
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleProp, ViewStyle } from "react-native";
+import {
+  NativeSafeAreaViewProps,
+  SafeAreaView,
+} from "react-native-safe-area-context";
 import { ErrorBoundary } from "./error-boundary";
 import { ErrorFallback } from "./error-fallback";
 import { ThemedView } from "./themed-view";
 
-export type PageLayoutProps = {
+/**
+ * Base props shared by all PageLayout variants
+ */
+type BasePageLayoutProps = {
   children: React.ReactNode;
   /**
    * Custom error fallback component
@@ -20,12 +27,33 @@ export type PageLayoutProps = {
    * @param error - The error that occurred
    */
   onResetError?: (resetError: () => void, error: Error) => void;
-  /**
-   * Whether to show the safe area view
-   * @default true
-   */
-  shouldShowSafeArea?: boolean;
 };
+
+/**
+ * PageLayout props when shouldShowSafeArea is true
+ * Style prop must be compatible with SafeAreaView
+ */
+type PageLayoutWithSafeAreaProps = BasePageLayoutProps & {
+  shouldShowSafeArea: true;
+  style?: NativeSafeAreaViewProps["style"];
+};
+
+/**
+ * PageLayout props when shouldShowSafeArea is false or undefined
+ * Style prop must be compatible with View
+ */
+type PageLayoutWithoutSafeAreaProps = BasePageLayoutProps & {
+  shouldShowSafeArea?: false;
+  style?: StyleProp<ViewStyle>;
+};
+
+/**
+ * Discriminated union type that conditionally types the style prop
+ * based on the shouldShowSafeArea prop
+ */
+export type PageLayoutProps =
+  | PageLayoutWithSafeAreaProps
+  | PageLayoutWithoutSafeAreaProps;
 
 /**
  * PageLayout component that wraps content with an ErrorBoundary
@@ -46,6 +74,7 @@ export default function PageLayout({
   errorFallback,
   onResetError,
   shouldShowSafeArea = true,
+  style,
 }: PageLayoutProps) {
   const { styles } = useThemedStyles((colors) => ({
     container: {
@@ -53,13 +82,8 @@ export default function PageLayout({
     },
     content: {
       flex: 1,
-      marginBottom: 100,
-      backgroundColor: colors.background,
     },
-    safeAreaView: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
+    safeAreaView: {},
   }));
   // Create a wrapper fallback that uses custom reset handler if provided
   const customFallback = React.useMemo(() => {
@@ -95,14 +119,14 @@ export default function PageLayout({
   return (
     <ErrorBoundary fallback={customFallback}>
       {shouldShowSafeArea && (
-        <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
+        <SafeAreaView edges={["top"]} style={[styles.safeAreaView, style]}>
           <ThemedView scrollable style={styles.content}>
             {children}
           </ThemedView>
         </SafeAreaView>
       )}
       {!shouldShowSafeArea && (
-        <ThemedView scrollable style={styles.content}>
+        <ThemedView scrollable style={[styles.content, style]}>
           {children}
         </ThemedView>
       )}
