@@ -46,6 +46,23 @@
     "orders": "Pedidos",
     "addresses": "Direcciones",
     "payment": "Métodos de Pago"
+  },
+  "login": {
+    "title": "Connexion",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "usernameHint": "Entrez votre nom d'utilisateur pour vous connecter",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "passwordHint": "Entrez votre mot de passe pour vous connecter",
+    "button": "SE CONNECTER",
+    "buttonHint": "Appuyez deux fois pour vous connecter à votre compte",
+    "error": {
+      "generic": "Une erreur s'est produite. Veuillez réessayer.",
+      "failed": "Échec de la connexion. Veuillez vérifier vos identifiants.",
+      "empty": "Veuillez entrer votre nom d'utilisateur et votre mot de passe."
+    },
+    "loading": "Connexion en cours..."
   }
 }
 

@@ -46,6 +46,23 @@
     "orders": "Orders",
     "addresses": "Addresses",
     "payment": "Payment Methods"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "usernameHint": "Enter your username to sign in",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordHint": "Enter your password to sign in",
+    "button": "LOGIN",
+    "buttonHint": "Double tap to sign in to your account",
+    "error": {
+      "generic": "An error occurred. Please try again.",
+      "failed": "Login failed. Please check your credentials.",
+      "empty": "Please enter both username and password."
+    },
+    "loading": "Signing in..."
   }
 }
 

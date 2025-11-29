@@ -1,3 +1,4 @@
+import authReducer from "@/redux/auth/auth-slice";
 import categoriesReducer from "@/redux/categories/categories-slice";
 import { storeApi } from "@/services/store-api";
 import {
@@ -7,7 +8,13 @@ import {
 } from "@reduxjs/toolkit";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
+// Import feature modules to ensure endpoints are injected into storeApi
+// This must happen after storeApi is imported but before the store is configured
+import "@/services/store-api/auth";
+import "@/services/store-api/categories";
+
 const rootReducer = combineReducers({
+  auth: authReducer,
   categories: categoriesReducer,
   [storeApi.reducerPath]: storeApi.reducer,
 });

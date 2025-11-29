@@ -3,7 +3,7 @@ import MasonryCategoryList from "@/components/masonry-category-list";
 import PageLayout from "@/components/page-layout";
 import { ThemedView } from "@/components/themed-view";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
-import { useGetCategoriesQuery } from "@/services/store-api";
+import { useGetCategoriesQuery } from "@/services/store-api/categories";
 import { mapCategoriesFromApi } from "@/utils/map-categories";
 import { useMemo } from "react";
 import { ActivityIndicator } from "react-native";

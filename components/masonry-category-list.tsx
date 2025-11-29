@@ -1,5 +1,6 @@
 import { Category } from "@/@types/categories";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { logger } from "@/services/logger";
 import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import { RefreshControl, View, type ViewStyle } from "react-native";
@@ -26,7 +27,7 @@ export default function MasonryCategoryList({
   }));
 
   const handleCategoryPress = (category: Category) => {
-    console.log("Category pressed:", category.id);
+    logger.debug("Category pressed", { categoryId: category.id });
   };
 
   const renderItem = ({ item }: { item: Category }) => {

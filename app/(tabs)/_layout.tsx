@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Platform } from "react-native";
@@ -9,11 +9,12 @@ import { HeartIcon } from "@/components/ui/svg-icons/heart-icon";
 import { HomeIcon } from "@/components/ui/svg-icons/home-icon";
 import { ProfileIcon } from "@/components/ui/svg-icons/profile-icon";
 import { ShopIcon } from "@/components/ui/svg-icons/shop-icon";
+import { useSession } from "@/context/session-context";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-
+  const { session, isLoading } = useSession();
   const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
@@ -52,6 +53,15 @@ export default function TabLayout() {
       paddingVertical: 4,
     },
   }));
+
+  // Show nothing while loading to prevent flicker
+  if (isLoading) {
+    return null;
+  }
+
+  if (!session) {
+    return <Redirect href="/login" />;
+  }
 
   return (
     <Tabs

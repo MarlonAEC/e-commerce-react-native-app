@@ -101,7 +101,9 @@ export default function PageLayout({
       paddingBottom:
         shouldShowSafeArea === false ? (Platform.OS === "ios" ? 70 : 80) : 0,
     },
-    safeAreaView: {},
+    safeAreaView: {
+      flex: 1,
+    },
   }));
   // Create a wrapper fallback that uses custom reset handler if provided
   const customFallback = React.useMemo(() => {

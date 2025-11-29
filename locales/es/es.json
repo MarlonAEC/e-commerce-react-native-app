@@ -46,6 +46,23 @@
     "orders": "Pedidos",
     "addresses": "Direcciones",
     "payment": "Métodos de Pago"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "username": "Nombre de Usuario",
+    "usernamePlaceholder": "Ingresa tu nombre de usuario",
+    "usernameHint": "Ingresa tu nombre de usuario para iniciar sesión",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "passwordHint": "Ingresa tu contraseña para iniciar sesión",
+    "button": "INICIAR SESIÓN",
+    "buttonHint": "Toca dos veces para iniciar sesión en tu cuenta",
+    "error": {
+      "generic": "Ocurrió un error. Por favor intenta de nuevo.",
+      "failed": "Error al iniciar sesión. Por favor verifica tus credenciales.",
+      "empty": "Por favor ingresa tu nombre de usuario y contraseña."
+    },
+    "loading": "Iniciando sesión..."
   }
 }
 
