@@ -2,16 +2,20 @@ import { Category } from "@/@types/categories";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import { FlashList } from "@shopify/flash-list";
 import React from "react";
-import { View, type ViewStyle } from "react-native";
+import { RefreshControl, View, type ViewStyle } from "react-native";
 import { CategoryCard } from "./category-card";
 import { ThemedView } from "./themed-view";
 
 export default function MasonryCategoryList({
   categories,
+  refreshing,
+  onRefresh,
 }: {
   categories: Category[];
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }) {
-  const { styles } = useThemedStyles((colors) => ({
+  const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
       backgroundColor: colors.background,
@@ -39,15 +43,34 @@ export default function MasonryCategoryList({
     );
   };
 
+  const handleRefresh = () => {
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+
+  // Create RefreshControl with proper iOS and Android support
+  const refreshControl = onRefresh ? (
+    <RefreshControl
+      refreshing={refreshing ?? false}
+      onRefresh={handleRefresh}
+      tintColor={colors.tint} // iOS
+      colors={[colors.tint]} // Android
+      progressBackgroundColor={colors.background} // Android
+    />
+  ) : undefined;
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} scrollable={false}>
       <FlashList<Category>
         data={categories}
         renderItem={renderItem}
-        keyExtractor={(item: Category) => item.id}
+        keyExtractor={(item: Category) => item.id.toString()}
         numColumns={2}
         masonry
+        optimizeItemArrangement
         contentContainerStyle={styles.listContainer}
+        refreshControl={refreshControl}
         overrideItemLayout={(layout, item) => {
           layout.span = item.span;
         }}

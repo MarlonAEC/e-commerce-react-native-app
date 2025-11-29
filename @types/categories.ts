@@ -1,9 +1,17 @@
 import { ImageSource } from "expo-image";
 
+export interface BaseCategoryFromApi {
+  id: number;
+  name: string;
+  image: string;
+  slug: string;
+}
+
 export interface Category {
   id: string;
   title: string;
   image: ImageSource;
+  slug: string;
   /**
    * Alt text for the category image (used for accessibility)
    * Describes what the image shows

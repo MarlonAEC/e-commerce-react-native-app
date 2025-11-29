@@ -1,6 +1,6 @@
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { Platform, StyleProp, ViewStyle } from "react-native";
 import {
   NativeSafeAreaViewProps,
   SafeAreaView,
@@ -27,6 +27,15 @@ type BasePageLayoutProps = {
    * @param error - The error that occurred
    */
   onResetError?: (resetError: () => void, error: Error) => void;
+  /**
+   * Enable pull-to-refresh functionality
+   * When provided, shows a refresh indicator when pulling down
+   */
+  refreshing?: boolean;
+  /**
+   * Callback function called when user pulls down to refresh
+   */
+  onRefresh?: () => void;
 };
 
 /**
@@ -75,6 +84,8 @@ export default function PageLayout({
   onResetError,
   shouldShowSafeArea = true,
   style,
+  refreshing,
+  onRefresh,
 }: PageLayoutProps) {
   const { styles } = useThemedStyles((colors) => ({
     container: {
@@ -82,6 +93,13 @@ export default function PageLayout({
     },
     content: {
       flex: 1,
+    },
+    contentContainer: {
+      flexGrow: 1,
+      // Add bottom padding to account for tab bar when shouldShowSafeArea is false
+      // Tab bar height: iOS = 88, Android = 70, plus extra spacing
+      paddingBottom:
+        shouldShowSafeArea === false ? (Platform.OS === "ios" ? 100 : 80) : 0,
     },
     safeAreaView: {},
   }));
@@ -120,13 +138,18 @@ export default function PageLayout({
     <ErrorBoundary fallback={customFallback}>
       {shouldShowSafeArea && (
         <SafeAreaView edges={["top"]} style={[styles.safeAreaView, style]}>
-          <ThemedView scrollable style={styles.content}>
+          <ThemedView
+            scrollable
+            style={[styles.content, styles.contentContainer]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          >
             {children}
           </ThemedView>
         </SafeAreaView>
       )}
       {!shouldShowSafeArea && (
-        <ThemedView scrollable style={[styles.content, style]}>
+        <ThemedView scrollable={false} style={[styles.contentContainer, style]}>
           {children}
         </ThemedView>
       )}
