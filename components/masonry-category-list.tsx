@@ -1,5 +1,4 @@
 import { Category } from "@/@types/categories";
-import { categories } from "@/constants/categories";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import { FlashList } from "@shopify/flash-list";
 import React from "react";
@@ -7,7 +6,11 @@ import { View, type ViewStyle } from "react-native";
 import { CategoryCard } from "./category-card";
 import { ThemedView } from "./themed-view";
 
-export default function MasonryCategoryList() {
+export default function MasonryCategoryList({
+  categories,
+}: {
+  categories: Category[];
+}) {
   const { styles } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
