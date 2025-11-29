@@ -1,11 +1,19 @@
 import categoriesReducer from "@/redux/categories/categories-slice";
-import { configureStore } from "@reduxjs/toolkit";
+import { storeApi } from "@/services/store-api";
+import {
+  combineReducers,
+  configureStore,
+  type Middleware,
+} from "@reduxjs/toolkit";
 import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
+const rootReducer = combineReducers({
+  categories: categoriesReducer,
+  [storeApi.reducerPath]: storeApi.reducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    categories: categoriesReducer,
-  },
+  reducer: rootReducer,
   // Redux DevTools is automatically enabled in development mode
   // For React Native, you can use:
   // 1. React Native Debugger (recommended) - https://github.com/jhen0409/react-native-debugger
@@ -14,6 +22,12 @@ export const store = configureStore({
   devTools: __DEV__,
   enhancers: (getDefaultEnhancers) =>
     getDefaultEnhancers().concat(devToolsEnhancer()),
+  middleware: (getDefaultMiddleware) => {
+    const defaultMiddleware = getDefaultMiddleware();
+    return defaultMiddleware.concat(
+      storeApi.middleware
+    ) as unknown as typeof defaultMiddleware & readonly Middleware[];
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
