@@ -99,7 +99,7 @@ export default function PageLayout({
       // Add bottom padding to account for tab bar when shouldShowSafeArea is false
       // Tab bar height: iOS = 88, Android = 70, plus extra spacing
       paddingBottom:
-        shouldShowSafeArea === false ? (Platform.OS === "ios" ? 100 : 80) : 0,
+        shouldShowSafeArea === false ? (Platform.OS === "ios" ? 70 : 80) : 0,
     },
     safeAreaView: {},
   }));
