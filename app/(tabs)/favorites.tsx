@@ -1,10 +1,10 @@
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Typography } from "@/components/ui/typography";
 
 export default function FavoritesScreen() {
   return (
     <ThemedView>
-      <ThemedText>Shop</ThemedText>
+      <Typography variant="h1">Shop</Typography>
     </ThemedView>
   );
 }

@@ -1,11 +1,11 @@
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Typography } from "@/components/ui/typography";
 import { StyleSheet } from "react-native";
 
 export default function ProfileScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText>Profile</ThemedText>
+      <Typography variant="h1">Profile</Typography>
     </ThemedView>
   );
 }

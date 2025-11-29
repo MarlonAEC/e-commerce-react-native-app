@@ -1,5 +1,5 @@
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Typography } from "@/components/ui/typography";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
@@ -8,8 +8,8 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>{t("home.title")}</ThemedText>
-      <ThemedText style={styles.greeting}>{t("home.greeting")}</ThemedText>
+      <Typography variant="h1">{t("home.title")}</Typography>
+      <Typography variant="body">{t("home.greeting")}</Typography>
     </ThemedView>
   );
 }
