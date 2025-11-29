@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React, { useMemo } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Platform } from "react-native";
 
@@ -9,16 +9,12 @@ import { HeartIcon } from "@/components/ui/svg-icons/heart-icon";
 import { HomeIcon } from "@/components/ui/svg-icons/home-icon";
 import { ProfileIcon } from "@/components/ui/svg-icons/profile-icon";
 import { ShopIcon } from "@/components/ui/svg-icons/shop-icon";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const colors = useMemo(() => Colors[colorScheme ?? "light"], [colorScheme]);
   const { t } = useTranslation();
 
-  const styles = useThemedStyles((colors) => ({
+  const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
       justifyContent: "center",
@@ -40,7 +36,7 @@ export default function TabLayout() {
         ? {
             shadowColor: "#000000",
             shadowOffset: { width: 0, height: -4 },
-            shadowOpacity: colors.background === "#151718" ? 0.5 : 0.15, // Dark mode has higher opacity
+            shadowOpacity: colors.background === "#151718" ? 0.5 : 0.15,
             shadowRadius: 8,
           }
         : {

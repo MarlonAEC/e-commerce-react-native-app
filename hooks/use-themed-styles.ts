@@ -16,12 +16,12 @@ type Style = ViewStyle | TextStyle | ImageStyle;
  * Hook to create themed styles that automatically update when theme changes.
  *
  * @param styleFactory - A function that receives theme colors and returns a style object
- * @returns A StyleSheet with themed styles
+ * @returns An object containing both the StyleSheet and the colors object
  *
  * @example
  * ```tsx
  * function MyComponent() {
- *   const styles = useThemedStyles((colors) => ({
+ *   const { styles, colors } = useThemedStyles((colors) => ({
  *     container: {
  *       flex: 1,
  *       backgroundColor: colors.background,
@@ -42,6 +42,7 @@ type Style = ViewStyle | TextStyle | ImageStyle;
  *   return (
  *     <View style={styles.container}>
  *       <Text style={styles.title}>Hello</Text>
+ *       <Text style={{ color: colors.tint }}>Tinted text</Text>
  *     </View>
  *   );
  * }
@@ -49,12 +50,21 @@ type Style = ViewStyle | TextStyle | ImageStyle;
  */
 export function useThemedStyles<T extends Record<string, Style>>(
   styleFactory: (colors: ThemeColors) => T
-): T {
+): { styles: T; colors: ThemeColors } {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
 
-  return useMemo(() => {
-    const styles = styleFactory(colors);
-    return StyleSheet.create(styles) as T;
+  const styles = useMemo(() => {
+    const styleObject = styleFactory(colors);
+    return StyleSheet.create(styleObject) as T;
   }, [styleFactory, colors]);
+
+  return useMemo(
+    () => ({
+      styles,
+      colors,
+      colorScheme,
+    }),
+    [styles, colors, colorScheme]
+  );
 }
