@@ -13,13 +13,30 @@ export type CategoryCardProps = {
    * If both category.onPress and onPress are provided, category.onPress takes precedence
    */
   onPress?: () => void;
+  /**
+   * Accessibility label for the category card
+   * If not provided, defaults to the category title
+   */
+  accessibilityLabel?: string;
+  /**
+   * Accessibility hint describing what happens when the card is pressed
+   * If not provided, uses a default hint
+   */
+  accessibilityHint?: string;
 };
 
 /**
  * CategoryCard component that displays an image with optional text overlay
  * Matches the design from the reference image with text floating on top of images
+ *
+ * Includes full accessibility support for screen readers and assistive technologies
  */
-export function CategoryCard({ category, onPress }: CategoryCardProps) {
+export function CategoryCard({
+  category,
+  onPress,
+  accessibilityLabel,
+  accessibilityHint,
+}: CategoryCardProps) {
   const { styles } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
@@ -75,18 +92,37 @@ export function CategoryCard({ category, onPress }: CategoryCardProps) {
     }
   };
 
+  // Default accessibility props
+  const defaultAccessibilityLabel = accessibilityLabel || category.title;
+  const defaultAccessibilityHint =
+    accessibilityHint || `Double tap to view ${category.title} category`;
+
   return (
     <Pressable
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
       onPress={handlePress}
+      accessibilityRole="button"
+      accessibilityLabel={defaultAccessibilityLabel}
+      accessibilityHint={defaultAccessibilityHint}
+      accessibilityState={{
+        disabled: !category.onPress && !onPress,
+      }}
     >
       <View style={styles.imageContainer}>
         <Image
           source={category.image}
           style={styles.image}
           contentFit="cover"
+          accessibilityRole="image"
+          accessibilityLabel={category.alt}
+          accessibilityElementsHidden={true}
+          importantForAccessibility="no"
         />
-        <View style={styles.textOverlay}>
+        <View
+          style={styles.textOverlay}
+          accessibilityElementsHidden={true}
+          importantForAccessibility="no"
+        >
           <View style={styles.textContainer}>
             <Typography
               variant="h3"
@@ -97,6 +133,8 @@ export function CategoryCard({ category, onPress }: CategoryCardProps) {
                 textShadowRadius: 3,
                 fontWeight: "700",
               }}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
             >
               {category.title}
             </Typography>

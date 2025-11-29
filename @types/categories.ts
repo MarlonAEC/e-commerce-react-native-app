@@ -4,6 +4,11 @@ export interface Category {
   id: string;
   title: string;
   image: ImageSource;
+  /**
+   * Alt text for the category image (used for accessibility)
+   * Describes what the image shows
+   */
+  alt: string;
   span: number;
   /**
    * Optional callback when category is pressed
