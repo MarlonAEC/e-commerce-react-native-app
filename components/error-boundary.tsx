@@ -1,5 +1,6 @@
 import React, { Component, type ReactNode } from "react";
 
+import { logger } from "@/services/logger";
 import { ErrorFallback } from "./error-fallback";
 
 interface ErrorBoundaryProps {
@@ -47,9 +48,12 @@ class ErrorBoundaryClass extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error details to console (in production, you might want to send this to an error reporting service)
-    console.error("ErrorBoundary caught an error:", error);
-    console.error("Error info:", errorInfo);
+    // Log error details using the logger service
+    // This can be easily swapped to use Sentry, Crashlytics, etc.
+    logger.error("ErrorBoundary caught an error", error, {
+      componentStack: errorInfo.componentStack,
+      errorBoundary: true,
+    });
   }
 
   resetError = () => {
