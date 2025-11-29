@@ -77,6 +77,7 @@ export default function TabLayout() {
               stroke={focused ? undefined : "#9B9B9B"}
             />
           ),
+          tabBarAccessibilityLabel: t("tabs.home"),
         }}
       />
       <Tabs.Screen
@@ -89,6 +90,7 @@ export default function TabLayout() {
               stroke={focused ? undefined : "#9B9B9B"}
             />
           ),
+          tabBarAccessibilityLabel: t("tabs.shop"),
         }}
       />
       <Tabs.Screen
@@ -98,6 +100,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <BagIcon fill={focused ? color : "#fff"} stroke={color} />
           ),
+          tabBarAccessibilityLabel: t("tabs.bag"),
         }}
       />
       <Tabs.Screen
@@ -107,6 +110,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <HeartIcon fill={focused ? color : "#fff"} stroke={color} />
           ),
+          tabBarAccessibilityLabel: t("tabs.favorites"),
         }}
       />
       <Tabs.Screen
@@ -119,6 +123,7 @@ export default function TabLayout() {
               stroke={focused ? undefined : "#9B9B9B"}
             />
           ),
+          tabBarAccessibilityLabel: t("tabs.profile"),
         }}
       />
     </Tabs>
