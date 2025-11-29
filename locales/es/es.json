@@ -1,0 +1,51 @@
+{
+  "tabs": {
+    "home": "Inicio",
+    "shop": "Tienda",
+    "bag": "Bolsa",
+    "favorites": "Favoritos",
+    "profile": "Perfil"
+  },
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Hecho"
+  },
+  "home": {
+    "title": "Inicio",
+    "greeting": "¡Hola, bienvenido a nuestra tienda!"
+  },
+  "shop": {
+    "title": "Tienda",
+    "products": "Productos",
+    "categories": "Categorías"
+  },
+  "bag": {
+    "title": "Bolsa de Compras",
+    "empty": "Tu bolsa está vacía",
+    "items": "{{count}} artículo",
+    "items_plural": "{{count}} artículos",
+    "total": "Total"
+  },
+  "favorites": {
+    "title": "Favoritos",
+    "empty": "Aún no tienes favoritos",
+    "remove": "Eliminar de favoritos"
+  },
+  "profile": {
+    "title": "Perfil",
+    "settings": "Configuración",
+    "orders": "Pedidos",
+    "addresses": "Direcciones",
+    "payment": "Métodos de Pago"
+  }
+}
+

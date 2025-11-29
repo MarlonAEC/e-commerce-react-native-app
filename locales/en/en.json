@@ -1,0 +1,51 @@
+{
+  "tabs": {
+    "home": "Home",
+    "shop": "Shop",
+    "bag": "Bag",
+    "favorites": "Favorites",
+    "profile": "Profile"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done"
+  },
+  "home": {
+    "title": "Home",
+    "greeting": "Hello, welcome to our store!"
+  },
+  "shop": {
+    "title": "Shop",
+    "products": "Products",
+    "categories": "Categories"
+  },
+  "bag": {
+    "title": "Shopping Bag",
+    "empty": "Your bag is empty",
+    "items": "{{count}} item",
+    "items_plural": "{{count}} items",
+    "total": "Total"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "No favorites yet",
+    "remove": "Remove from favorites"
+  },
+  "profile": {
+    "title": "Profile",
+    "settings": "Settings",
+    "orders": "Orders",
+    "addresses": "Addresses",
+    "payment": "Payment Methods"
+  }
+}
+
