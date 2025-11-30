@@ -40,6 +40,9 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
+      // Keep isLoading true - will be set to false after user is fetched
+      // This ensures splash screen stays visible until user data is loaded
+      state.isLoading = true;
     },
     restoreSession: (
       state,
@@ -51,7 +54,8 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
-      state.isLoading = false;
+      // Keep isLoading true - will be set to false after user is fetched
+      // This ensures splash screen stays visible until user data is loaded
     },
     setSessionLoaded: (state) => {
       state.isLoading = false;
@@ -59,11 +63,23 @@ export const authSlice = createSlice({
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
+    refreshTokens: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken: string;
+      }>
+    ) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      // Keep user and isAuthenticated unchanged
+    },
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
       state.isAuthenticated = false;
+      state.isLoading = false;
     },
   },
 });
@@ -74,6 +90,7 @@ export const {
   restoreSession,
   setSessionLoaded,
   setUser,
+  refreshTokens,
   logout,
 } = authSlice.actions;
 export default authSlice.reducer;

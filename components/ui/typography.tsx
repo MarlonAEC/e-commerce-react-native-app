@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, type TextProps, type TextStyle } from "react-native";
+import { Platform, Text, type TextProps, type TextStyle } from "react-native";
 
-import { Colors, Fonts } from "@/constants/theme";
+import { Colors, Fonts, getMetropolisFont } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export type TypographyVariant =
@@ -183,14 +183,25 @@ export function Typography({
   const fonts = Fonts;
 
   const variantStyle = variantStyles[variant];
-  const fontFamilyValue = fonts[fontFamily];
+  const finalWeight = weight ?? variantStyle.fontWeight;
+
+  // Use Metropolis font for sans family, otherwise use theme font
+  const fontFamilyValue =
+    fontFamily === "sans"
+      ? getMetropolisFont(
+          finalWeight as "normal" | "400" | "500" | "600" | "700" | "bold",
+          false // TODO: Add italic support if needed
+        )
+      : fonts[fontFamily];
 
   const textColor = customColor ?? colors[color];
 
   const computedStyle: TextStyle = {
     fontFamily: fontFamilyValue,
     fontSize: size ?? variantStyle.fontSize,
-    fontWeight: weight ?? variantStyle.fontWeight,
+    // On iOS/Android, we use the fontFamily to specify weight, so we set fontWeight to "normal"
+    // On web, we can use fontWeight directly
+    fontWeight: Platform.OS === "web" ? finalWeight : "normal",
     lineHeight: lineHeight ?? variantStyle.lineHeight,
     color: textColor,
     textAlign: align,

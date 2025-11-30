@@ -1,5 +1,6 @@
 import PageLayout from "@/components/page-layout";
 import { ThemedView } from "@/components/themed-view";
+import { Button } from "@/components/ui/button";
 import CustomInput from "@/components/ui/custom-input";
 import { Typography } from "@/components/ui/typography";
 import { useSession } from "@/context/session-context";
@@ -13,12 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ActivityIndicator,
-  Pressable,
-  View,
-  type ViewStyle,
-} from "react-native";
+import { Pressable, View, type ViewStyle } from "react-native";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -70,21 +66,6 @@ export default function LoginScreen() {
       color: colors.text,
       fontSize: 16,
       boxShadow: "0 1 8px 0 rgba(0, 0, 0, 0.05)",
-    },
-    button: {
-      width: "100%",
-      height: 50,
-      backgroundColor: colors.tint,
-      borderRadius: 30,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 8,
-    },
-    buttonText: {
-      color: colors.background,
-      fontWeight: "600",
-      textTransform: "uppercase",
-      fontSize: 14,
     },
     errorText: {
       color: "#DB3022",
@@ -254,36 +235,15 @@ export default function LoginScreen() {
             </Typography>
           )}
 
-          <Pressable
-            style={[
-              styles.button,
-              (!username.trim() || !password.trim() || isLoading) &&
-                styles.disabledButton,
-            ]}
+          <Button
+            title={t("login.button")}
             onPress={handleLogin}
-            disabled={!username.trim() || !password.trim() || isLoading}
-            accessibilityRole="button"
+            loading={isLoading}
+            disabled={!username.trim() || !password.trim()}
+            buttonStyle={{ marginTop: 8 }}
             accessibilityLabel={t("login.button")}
             accessibilityHint={t("login.buttonHint")}
-            accessibilityState={{
-              disabled: !username.trim() || !password.trim() || isLoading,
-            }}
-          >
-            {isLoading ? (
-              <ActivityIndicator
-                color={colors.background}
-                accessibilityLabel={t("login.loading")}
-              />
-            ) : (
-              <Typography
-                variant="button"
-                customColor={colors.background}
-                style={styles.buttonText}
-              >
-                {t("login.button")}
-              </Typography>
-            )}
-          </Pressable>
+          />
 
           {/* Test Credentials Info */}
           {__DEV__ && (

@@ -10,6 +10,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
@@ -21,6 +22,34 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const backgroundColor = Colors[colorScheme ?? "light"].background;
+
+  // Load Metropolis fonts
+  const [fontsLoaded, fontError] = useFonts({
+    "Metropolis-Thin": require("@/assets/fonts/metropolis/Metropolis-Thin.otf"),
+    "Metropolis-ThinItalic": require("@/assets/fonts/metropolis/Metropolis-ThinItalic.otf"),
+    "Metropolis-ExtraLight": require("@/assets/fonts/metropolis/Metropolis-ExtraLight.otf"),
+    "Metropolis-ExtraLightItalic": require("@/assets/fonts/metropolis/Metropolis-ExtraLightItalic.otf"),
+    "Metropolis-Light": require("@/assets/fonts/metropolis/Metropolis-Light.otf"),
+    "Metropolis-LightItalic": require("@/assets/fonts/metropolis/Metropolis-LightItalic.otf"),
+    "Metropolis-Regular": require("@/assets/fonts/metropolis/Metropolis-Regular.otf"),
+    "Metropolis-RegularItalic": require("@/assets/fonts/metropolis/Metropolis-RegularItalic.otf"),
+    "Metropolis-Medium": require("@/assets/fonts/metropolis/Metropolis-Medium.otf"),
+    "Metropolis-MediumItalic": require("@/assets/fonts/metropolis/Metropolis-MediumItalic.otf"),
+    "Metropolis-SemiBold": require("@/assets/fonts/metropolis/Metropolis-SemiBold.otf"),
+    "Metropolis-SemiBoldItalic": require("@/assets/fonts/metropolis/Metropolis-SemiBoldItalic.otf"),
+    "Metropolis-Bold": require("@/assets/fonts/metropolis/Metropolis-Bold.otf"),
+    "Metropolis-BoldItalic": require("@/assets/fonts/metropolis/Metropolis-BoldItalic.otf"),
+    "Metropolis-ExtraBold": require("@/assets/fonts/metropolis/Metropolis-ExtraBold.otf"),
+    "Metropolis-ExtraBoldItalic": require("@/assets/fonts/metropolis/Metropolis-ExtraBoldItalic.otf"),
+    "Metropolis-Black": require("@/assets/fonts/metropolis/Metropolis-Black.otf"),
+    "Metropolis-BlackItalic": require("@/assets/fonts/metropolis/Metropolis-BlackItalic.otf"),
+  });
+
+  // Don't render until fonts are loaded
+  // The SplashScreenController will handle hiding the splash screen after auth loads
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

@@ -106,3 +106,12 @@ export interface LoginResponse {
   accessToken: string; // JWT accessToken (for backward compatibility) in response and cookies
   refreshToken: string; // refreshToken in response and cookies
 }
+
+/**
+ * Refresh token response interface
+ * Returned by the /auth/refresh endpoint
+ */
+export interface RefreshTokenResponse {
+  accessToken: string; // New accessToken (returned in both response and cookies)
+  refreshToken: string; // New refreshToken (returned in both response and cookies)
+}

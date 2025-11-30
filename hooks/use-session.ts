@@ -4,9 +4,14 @@ import {
   restoreSession,
   setLoginResponse,
   setSessionLoaded,
+  setUser,
 } from "@/redux/auth/auth-slice";
 import { logger } from "@/services/logger";
-import { useLoginMutation } from "@/services/store-api/auth";
+import {
+  useGetUserQuery,
+  useLoginMutation,
+  useRefreshTokenMutation,
+} from "@/services/store-api/auth";
 import {
   clearTokens,
   getAccessToken,
@@ -24,8 +29,51 @@ import { useEffect } from "react";
  */
 export function useSession() {
   const dispatch = useAppDispatch();
-  const { accessToken, isLoading } = useAppSelector((state) => state.auth);
+  const { accessToken, refreshToken, isLoading, user } = useAppSelector(
+    (state) => state.auth
+  );
   const [loginMutation] = useLoginMutation();
+  const [refreshTokenMutation] = useRefreshTokenMutation();
+
+  // Fetch user data when we have an access token but no user
+  const {
+    data: userData,
+    isLoading: isFetchingUser,
+    error: userError,
+  } = useGetUserQuery(undefined, {
+    skip: !accessToken || !!user, // Skip if no token or user already exists
+  });
+
+  // Track if we need to mark session as loaded after user fetch
+  const shouldMarkLoaded = accessToken && !user && !isFetchingUser;
+
+  // Update user in Redux when fetched
+  useEffect(() => {
+    if (userData) {
+      dispatch(setUser(userData));
+    }
+  }, [userData, dispatch]);
+
+  // Mark session as loaded after user is fetched (success or error)
+  useEffect(() => {
+    if (shouldMarkLoaded) {
+      // User fetch completed (either success or error)
+      dispatch(setSessionLoaded());
+
+      // Log error if user fetch failed
+      if (userError) {
+        const error =
+          userError instanceof Error
+            ? userError
+            : new Error(
+                "status" in userError
+                  ? `Failed to fetch user: ${userError.status}`
+                  : "Failed to fetch user data"
+              );
+        logger.error("Failed to fetch user data", error);
+      }
+    }
+  }, [shouldMarkLoaded, userError, dispatch]);
 
   // Load session from SecureStorage on mount (only once)
   useEffect(() => {
@@ -35,13 +83,45 @@ export function useSession() {
         const storedRefreshToken = await getRefreshToken();
 
         if (storedAccessToken && storedRefreshToken) {
-          // Restore session from SecureStorage
-          dispatch(
-            restoreSession({
-              accessToken: storedAccessToken,
+          // Try to refresh the token proactively to ensure it's valid
+          // If refresh fails, the automatic refresh on 401 will handle it
+          try {
+            const refreshResult = await refreshTokenMutation({
               refreshToken: storedRefreshToken,
-            })
-          );
+              expiresInMins: 30,
+            }).unwrap();
+
+            // Update tokens with refreshed ones
+            await Promise.all([
+              setAccessToken(refreshResult.accessToken),
+              setRefreshToken(refreshResult.refreshToken),
+            ]);
+
+            // Restore session with refreshed tokens
+            dispatch(
+              restoreSession({
+                accessToken: refreshResult.accessToken,
+                refreshToken: refreshResult.refreshToken,
+              })
+            );
+          } catch (refreshError) {
+            // If refresh fails, still try to restore with stored tokens
+            // The automatic refresh on 401 will handle expired tokens
+            const err =
+              refreshError instanceof Error
+                ? refreshError
+                : new Error(String(refreshError));
+            logger.warn("Failed to refresh token on session restore", {
+              error: err.message,
+            });
+            dispatch(
+              restoreSession({
+                accessToken: storedAccessToken,
+                refreshToken: storedRefreshToken,
+              })
+            );
+          }
+          // User will be fetched automatically by useGetUserQuery
         } else {
           // No tokens found, mark as loaded (user is not logged in)
           dispatch(setSessionLoaded());
@@ -58,7 +138,7 @@ export function useSession() {
     if (isLoading) {
       loadSession();
     }
-  }, [dispatch, isLoading]);
+  }, [dispatch, isLoading, refreshTokenMutation]);
 
   const signIn = async (username: string, password: string) => {
     try {
@@ -70,8 +150,10 @@ export function useSession() {
         setRefreshToken(result.refreshToken),
       ]);
 
-      // Update Redux state
+      // Update Redux state with tokens
       dispatch(setLoginResponse(result));
+
+      // User will be fetched automatically by useGetUserQuery
       return true;
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
@@ -94,6 +176,7 @@ export function useSession() {
   return {
     signIn,
     signOut,
+    refreshToken,
     session: accessToken, // Use accessToken as session identifier
     isLoading, // Loading state while checking SecureStorage
   };

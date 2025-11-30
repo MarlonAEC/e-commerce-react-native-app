@@ -44,6 +44,7 @@ type BasePageLayoutProps = {
  */
 type PageLayoutWithSafeAreaProps = BasePageLayoutProps & {
   shouldShowSafeArea: true;
+  scrollable?: boolean;
   style?: NativeSafeAreaViewProps["style"];
 };
 
@@ -53,6 +54,7 @@ type PageLayoutWithSafeAreaProps = BasePageLayoutProps & {
  */
 type PageLayoutWithoutSafeAreaProps = BasePageLayoutProps & {
   shouldShowSafeArea?: false;
+  scrollable?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -86,6 +88,7 @@ export default function PageLayout({
   style,
   refreshing,
   onRefresh,
+  scrollable = true,
 }: PageLayoutProps) {
   const { styles } = useThemedStyles((colors) => ({
     container: {
@@ -103,6 +106,7 @@ export default function PageLayout({
     },
     safeAreaView: {
       flex: 1,
+      backgroundColor: "white",
     },
   }));
   // Create a wrapper fallback that uses custom reset handler if provided
@@ -141,7 +145,7 @@ export default function PageLayout({
       {shouldShowSafeArea && (
         <SafeAreaView edges={["top"]} style={[styles.safeAreaView, style]}>
           <ThemedView
-            scrollable
+            scrollable={scrollable}
             style={[styles.content, styles.contentContainer]}
             refreshing={refreshing}
             onRefresh={onRefresh}
@@ -151,7 +155,10 @@ export default function PageLayout({
         </SafeAreaView>
       )}
       {!shouldShowSafeArea && (
-        <ThemedView scrollable={false} style={[styles.contentContainer, style]}>
+        <ThemedView
+          scrollable={scrollable}
+          style={[styles.contentContainer, style]}
+        >
           {children}
         </ThemedView>
       )}

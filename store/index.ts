@@ -1,4 +1,5 @@
 import authReducer from "@/redux/auth/auth-slice";
+import cartReducer from "@/redux/cart/cart-slice";
 import categoriesReducer from "@/redux/categories/categories-slice";
 import { storeApi } from "@/services/store-api";
 import {
@@ -16,6 +17,7 @@ import "@/services/store-api/categories";
 const rootReducer = combineReducers({
   auth: authReducer,
   categories: categoriesReducer,
+  cart: cartReducer,
   [storeApi.reducerPath]: storeApi.reducer,
 });
 

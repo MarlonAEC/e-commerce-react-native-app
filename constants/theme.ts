@@ -31,10 +31,62 @@ export const Colors = {
   },
 };
 
+/**
+ * Metropolis font family mapping
+ * Maps font weights to the appropriate Metropolis font file
+ */
+export const MetropolisFonts = {
+  thin: "Metropolis-Thin",
+  thinItalic: "Metropolis-ThinItalic",
+  extraLight: "Metropolis-ExtraLight",
+  extraLightItalic: "Metropolis-ExtraLightItalic",
+  light: "Metropolis-Light",
+  lightItalic: "Metropolis-LightItalic",
+  regular: "Metropolis-Regular",
+  regularItalic: "Metropolis-RegularItalic",
+  medium: "Metropolis-Medium",
+  mediumItalic: "Metropolis-MediumItalic",
+  semiBold: "Metropolis-SemiBold",
+  semiBoldItalic: "Metropolis-SemiBoldItalic",
+  bold: "Metropolis-Bold",
+  boldItalic: "Metropolis-BoldItalic",
+  extraBold: "Metropolis-ExtraBold",
+  extraBoldItalic: "Metropolis-ExtraBoldItalic",
+  black: "Metropolis-Black",
+  blackItalic: "Metropolis-BlackItalic",
+} as const;
+
+/**
+ * Get Metropolis font name based on weight
+ * @param weight - Font weight (normal, 400, 500, 600, 700, bold)
+ * @param italic - Whether to use italic variant
+ * @returns Font family name
+ */
+export function getMetropolisFont(
+  weight: "normal" | "400" | "500" | "600" | "700" | "bold" = "normal",
+  italic = false
+): string {
+  const weightMap: Record<string, keyof typeof MetropolisFonts> = {
+    normal: "regular",
+    "400": "regular",
+    "500": "medium",
+    "600": "semiBold",
+    "700": "bold",
+    bold: "bold",
+  };
+
+  const baseWeight = weightMap[weight] || "regular";
+  const fontKey = italic
+    ? (`${baseWeight}Italic` as keyof typeof MetropolisFonts)
+    : baseWeight;
+
+  return MetropolisFonts[fontKey];
+}
+
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: "system-ui",
+    /** Metropolis font family - default sans-serif */
+    sans: MetropolisFonts.regular,
     /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
     /** iOS `UIFontDescriptorSystemDesignRounded` */
@@ -43,16 +95,17 @@ export const Fonts = Platform.select({
     mono: "ui-monospace",
   },
   default: {
-    sans: "normal",
+    /** Metropolis font family - default sans-serif */
+    sans: MetropolisFonts.regular,
     serif: "serif",
-    rounded: "normal",
+    rounded: MetropolisFonts.regular,
     mono: "monospace",
   },
   web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    /** Metropolis font family with fallbacks */
+    sans: `'Metropolis', 'Metropolis-Regular', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`,
     serif: "Georgia, 'Times New Roman', serif",
-    rounded:
-      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    rounded: `'Metropolis', 'Metropolis-Regular', system-ui, sans-serif`,
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
