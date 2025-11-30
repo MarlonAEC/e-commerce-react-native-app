@@ -104,7 +104,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(bag)/index"
+        name="bag"
         options={{
           title: t("tabs.bag"),
           tabBarIcon: ({ color, focused }) => (

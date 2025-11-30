@@ -19,7 +19,7 @@ type BagItemProps = {
   onQuantityChange: (quantity: number) => void;
 };
 
-export function BagItem({
+export default function BagItem({
   thumbnail,
   name,
   color,

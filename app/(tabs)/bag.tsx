@@ -21,7 +21,7 @@ import {
   View,
   type ViewStyle,
 } from "react-native";
-import { BagItem } from "./components/bag-item";
+import BagItem from "../../components/bag-item";
 
 export default function BagScreen() {
   const dispatch = useAppDispatch();
@@ -205,7 +205,7 @@ export default function BagScreen() {
             renderItem={({ item }) => (
               <BagItem
                 {...item}
-                onQuantityChange={(newQuantity) =>
+                onQuantityChange={(newQuantity: number) =>
                   handleQuantityChange(item.id, newQuantity)
                 }
               />
