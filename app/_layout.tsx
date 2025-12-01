@@ -83,7 +83,6 @@ function RootNavigator() {
   // Define both routes - Stack.Protected will handle access control
   return (
     <Stack
-      initialRouteName="login"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,

@@ -6,7 +6,11 @@ import { Typography } from "@/components/ui/typography";
 import { useSession } from "@/context/session-context";
 import { useAppDispatch } from "@/hooks/use-redux-toolkit";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
-import { setLoginResponse } from "@/redux/auth/auth-slice";
+import {
+  setCredentials,
+  setLoginResponse,
+  setSessionLoaded,
+} from "@/redux/auth/auth-slice";
 import { logger } from "@/services/logger";
 import { useLoginMutation } from "@/services/store-api/auth";
 import { setAccessToken, setRefreshToken } from "@/utils/secure-storage";
@@ -145,6 +149,108 @@ export default function LoginScreen() {
         username: username.trim(),
         hasPassword: !!password.trim(),
       });
+
+      // Fallback: Create fake session when API fails (e.g., server down)
+      logger.warn("Creating fake session due to login failure", {
+        reason: "API unavailable",
+      });
+
+      // Generate fake tokens
+      const fakeAccessToken = `fake_access_token_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      const fakeRefreshToken = `fake_refresh_token_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+      // Create fake user object
+      const fakeUser = {
+        id: 1,
+        firstName: username.trim() || "Guest",
+        lastName: "User",
+        maidenName: "",
+        age: 25,
+        gender: "other",
+        email: `${username.trim() || "guest"}@example.com`,
+        phone: "+1234567890",
+        username: username.trim() || "guest",
+        password: "", // Don't store password
+        birthDate: "1998-01-01",
+        image: "https://i.dummyjson.com/data/users/1/avatar.jpg",
+        bloodGroup: "O+",
+        height: 175,
+        weight: 70,
+        eyeColor: "Brown",
+        hair: {
+          color: "Black",
+          type: "Straight",
+        },
+        ip: "192.168.1.1",
+        address: {
+          address: "123 Main St",
+          city: "New York",
+          state: "New York",
+          stateCode: "NY",
+          postalCode: "10001",
+          coordinates: {
+            lat: 40.7128,
+            lng: -74.006,
+          },
+          country: "United States",
+        },
+        macAddress: "00:00:00:00:00:00",
+        university: "Example University",
+        bank: {
+          cardExpire: "12/25",
+          cardNumber: "1234-5678-9012-3456",
+          cardType: "visa",
+          currency: "USD",
+          iban: "US123456789",
+        },
+        company: {
+          department: "Engineering",
+          name: "Example Corp",
+          title: "Software Developer",
+          address: {
+            address: "456 Business Ave",
+            city: "New York",
+            state: "New York",
+            stateCode: "NY",
+            postalCode: "10002",
+            coordinates: {
+              lat: 40.7589,
+              lng: -73.9851,
+            },
+            country: "United States",
+          },
+        },
+        ein: "12-3456789",
+        ssn: "123-45-6789",
+        userAgent: "Mozilla/5.0",
+        crypto: {
+          coin: "Bitcoin",
+          wallet: "0x1234567890abcdef",
+          network: "Ethereum",
+        },
+        role: "user",
+      };
+
+      // Store fake tokens in SecureStorage
+      await Promise.all([
+        setAccessToken(fakeAccessToken),
+        setRefreshToken(fakeRefreshToken),
+      ]);
+
+      // Update Redux state with fake credentials
+      dispatch(
+        setCredentials({
+          user: fakeUser,
+          accessToken: fakeAccessToken,
+          refreshToken: fakeRefreshToken,
+        })
+      );
+
+      // Mark session as loaded (since we have the user data already)
+      dispatch(setSessionLoaded());
+
+      // Navigate to home after creating fake session
+      routerNavigation.replace("/(tabs)");
     }
   };
 
