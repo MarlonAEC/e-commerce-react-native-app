@@ -11,10 +11,12 @@ export default function MasonryCategoryList({
   categories,
   refreshing,
   onRefresh,
+  onCategoryPress,
 }: {
   categories: Category[];
   refreshing?: boolean;
   onRefresh?: () => void;
+  onCategoryPress?: (category: Category) => void;
 }) {
   const { styles, colors } = useThemedStyles((colors) => ({
     container: {
@@ -28,6 +30,9 @@ export default function MasonryCategoryList({
 
   const handleCategoryPress = (category: Category) => {
     logger.debug("Category pressed", { categoryId: category.id });
+    if (onCategoryPress) {
+      onCategoryPress(category);
+    }
   };
 
   const renderItem = ({ item }: { item: Category }) => {

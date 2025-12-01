@@ -18,18 +18,23 @@ import {
 import { formatCategoryName } from "@/utils/format-category-name";
 import { mapProductsFromApi } from "@/utils/map-products";
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const LIMIT = 16; // Number of products to fetch per page
 
 export default function CategoryDetailScreen() {
   const { t } = useTranslation();
-  const { category } = useLocalSearchParams<{ category: string }>();
+  const { category, from } = useLocalSearchParams<{
+    category: string;
+    from?: string;
+  }>();
   const [skip, setSkip] = useState(0);
   const [allProducts, setAllProducts] = useState<ProductData[]>([]);
-  const [allProductsOriginal, setAllProductsOriginal] = useState<Product[]>(
-    []
-  );
+  const [allProductsOriginal, setAllProductsOriginal] = useState<Product[]>([]);
+
+  // Track the previous category to detect changes
+  const prevCategoryRef = useRef<string | undefined>(category);
+  const isCategoryChanging = prevCategoryRef.current !== category;
 
   // Check if this is the "all" category
   const isAllCategory = category?.toLowerCase() === "all";
@@ -121,15 +126,27 @@ export default function CategoryDetailScreen() {
   };
 
   const handleBackPress = () => {
-    router.back();
+    // Check if we came from the home tab
+    if (from === "home") {
+      // Navigate back to home tab instead of using router.back()
+      // which would stay within the shop stack
+      // Use router.navigate to switch to the home tab
+      router.navigate("/(tabs)");
+    } else {
+      // Normal back navigation within the shop stack
+      router.back();
+    }
   };
 
-  // Reset skip when category changes
+  // Reset skip when category changes and update the ref
   useEffect(() => {
-    setSkip(0);
-    setAllProducts([]);
-    setAllProductsOriginal([]);
-  }, [categorySlug]);
+    if (prevCategoryRef.current !== category) {
+      setSkip(0);
+      setAllProducts([]);
+      setAllProductsOriginal([]);
+      prevCategoryRef.current = category;
+    }
+  }, [category, categorySlug]);
 
   // Get favorites state
   const favorites = useAppSelector((state) => state.favorites.favorites);
@@ -167,14 +184,18 @@ export default function CategoryDetailScreen() {
     try {
       if (isFav) {
         await dispatch(removeFromFavorites(productIdNum)).unwrap();
-        logger.info("Product removed from favorites", { productId: productIdNum });
+        logger.info("Product removed from favorites", {
+          productId: productIdNum,
+        });
       } else {
         await dispatch(addToFavorites(originalProduct)).unwrap();
         logger.info("Product added to favorites", { productId: productIdNum });
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      logger.error("Failed to toggle favorite", err, { productId: productIdNum });
+      logger.error("Failed to toggle favorite", err, {
+        productId: productIdNum,
+      });
     }
   };
 
@@ -239,7 +260,7 @@ export default function CategoryDetailScreen() {
     <CategoryDisplay
       title={categoryName}
       products={productsWithFavorites}
-      isLoading={isLoading && skip === 0} // Only show loading on initial load
+      isLoading={(isLoading && skip === 0) || isCategoryChanging} // Show loading on initial load OR when switching categories
       error={error ? t("shop.failedToLoadProducts") : null}
       onProductPress={(product) => console.log(`Product ${product.id} pressed`)}
       onFavoritePress={handleToggleFavorite}
