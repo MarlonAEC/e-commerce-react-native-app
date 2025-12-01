@@ -110,10 +110,11 @@
   },
   "profile": {
     "title": "Profil",
-    "settings": "Paramètres",
-    "orders": "Commandes",
-    "addresses": "Adresses",
-    "payment": "Méthodes de paiement"
+    "myProfile": "Mon profil",
+    "language": "Langue",
+    "languageSubtitle": "Changer la langue de l'application",
+    "logout": "Déconnexion",
+    "logoutHint": "Se déconnecter de votre compte"
   },
   "login": {
     "title": "Connexion",
