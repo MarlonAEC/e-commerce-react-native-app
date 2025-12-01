@@ -26,7 +26,54 @@
   "shop": {
     "title": "Shop",
     "products": "Products",
-    "categories": "Categories"
+    "categories": "Categories",
+    "viewAllItems": "VIEW ALL ITEMS",
+    "chooseCategory": "Choose category",
+    "loadingCategories": "Loading categories...",
+    "errorLoadingCategories": "Error loading categories",
+    "viewCategory": "View {{category}} category",
+    "viewCategoryHint": "Double tap to view products in {{category}} category",
+    "viewAllItemsHint": "View all products across all categories",
+    "loadingProducts": "Loading products...",
+    "noProductsFound": "No products found",
+    "loadingMore": "Loading more...",
+    "failedToLoadProducts": "Failed to load products",
+    "goBack": "Go back",
+    "goBackHint": "Navigate back to previous screen",
+    "filters": {
+      "title": "Filters",
+      "priceRange": "Price range",
+      "colors": "Colors",
+      "sizes": "Sizes",
+      "category": "Category",
+      "selectColor": "Select {{color}} color",
+      "selectSize": "Select size {{size}}",
+      "selectCategory": "Select category {{category}}",
+      "discard": "Discard",
+      "discardHint": "Discard filters",
+      "apply": "Apply",
+      "applyHint": "Apply {{count}} filters",
+      "openFilters": "Open filters to refine products"
+    },
+    "sort": {
+      "title": "Sort",
+      "sortBy": "Sort by",
+      "openSort": "Open sort options",
+      "popular": "Popular",
+      "newest": "Newest",
+      "customerReview": "Customer review",
+      "priceLowHigh": "Price: lowest to high",
+      "priceHighLow": "Price: highest to low"
+    },
+    "product": {
+      "addToCart": "Add to Cart",
+      "addToCartHint": "Double tap to add this product to your cart",
+      "addToFavorites": "Add to favorites",
+      "removeFromFavorites": "Remove from favorites",
+      "toggleFavoriteHint": "Double tap to toggle favorite status",
+      "viewDetailsHint": "Double tap to view product details",
+      "byBrand": " by {{brand}}"
+    }
   },
   "bag": {
     "title": "Shopping Bag",

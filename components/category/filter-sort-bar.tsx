@@ -2,6 +2,7 @@ import { FilterIcon } from "@/components/ui/svg-icons/filter-icon";
 import { SortIcon } from "@/components/ui/svg-icons/sort-icon";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import React from "react";
 import { Platform, Pressable, View, type ViewStyle } from "react-native";
 
@@ -33,21 +34,41 @@ export type FilterSortBarProps = {
 
 /**
  * Get display text for sort option
+ * Note: This function should be used with useTranslation hook in components
+ * For now, keeping it for backward compatibility but it should use translations
  */
-export function getSortDisplayText(sort: SortOption): string {
+export function getSortDisplayText(sort: SortOption, t?: (key: string) => string): string {
+  if (!t) {
+    // Fallback for when translation is not available
+    switch (sort) {
+      case "popular":
+        return "Popular";
+      case "newest":
+        return "Newest";
+      case "customer_review":
+        return "Customer review";
+      case "price_low_high":
+        return "Price: lowest to high";
+      case "price_high_low":
+        return "Price: highest to low";
+      default:
+        return "Sort";
+    }
+  }
+  
   switch (sort) {
     case "popular":
-      return "Popular";
+      return t("shop.sort.popular");
     case "newest":
-      return "Newest";
+      return t("shop.sort.newest");
     case "customer_review":
-      return "Customer review";
+      return t("shop.sort.customerReview");
     case "price_low_high":
-      return "Price: lowest to high";
+      return t("shop.sort.priceLowHigh");
     case "price_high_low":
-      return "Price: highest to low";
+      return t("shop.sort.priceHighLow");
     default:
-      return "Sort";
+      return t("shop.sort.title");
   }
 }
 
@@ -61,6 +82,7 @@ export function FilterSortBar({
   onSortPress,
   activeFilterCount = 0,
 }: FilterSortBarProps) {
+  const { t } = useTranslation();
   const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       flexDirection: "row",
@@ -113,7 +135,9 @@ export function FilterSortBar({
     },
   }));
 
-  const sortText = currentSort ? getSortDisplayText(currentSort) : "Sort";
+  const sortText = currentSort
+    ? getSortDisplayText(currentSort, t)
+    : t("shop.sort.title");
 
   return (
     <View style={styles.container}>
@@ -121,12 +145,12 @@ export function FilterSortBar({
         style={styles.button}
         onPress={onFilterPress}
         accessibilityRole="button"
-        accessibilityLabel="Filters"
-        accessibilityHint="Open filters to refine products"
+        accessibilityLabel={t("shop.filters.title")}
+        accessibilityHint={t("shop.filters.openFilters")}
       >
         <FilterIcon fill={colors.text} />
         <Typography variant="bodySmall" style={styles.buttonText}>
-          Filters
+          {t("shop.filters.title")}
         </Typography>
         {activeFilterCount > 0 && (
           <View style={styles.filterBadge}>
@@ -141,8 +165,8 @@ export function FilterSortBar({
         style={styles.button}
         onPress={onSortPress}
         accessibilityRole="button"
-        accessibilityLabel={`Sort: ${sortText}`}
-        accessibilityHint="Open sort options"
+        accessibilityLabel={`${t("shop.sort.title")}: ${sortText}`}
+        accessibilityHint={t("shop.sort.openSort")}
       >
         <SortIcon fill={colors.text} />
         <Typography variant="bodySmall" style={styles.buttonText}>

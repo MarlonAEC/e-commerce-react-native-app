@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import React, { useState } from "react";
 import { Modal, Pressable, ScrollView, View, type ViewStyle } from "react-native";
 
@@ -54,6 +55,7 @@ export function FilterModal({
   onClose,
   onDiscard,
 }: FilterModalProps) {
+  const { t } = useTranslation();
   const { styles, colors } = useThemedStyles((colors) => ({
     modalOverlay: {
       flex: 1,
@@ -228,13 +230,13 @@ export function FilterModal({
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.dragHandle} />
             <Typography variant="h4" style={styles.title}>
-              Filters
+              {t("shop.filters.title")}
             </Typography>
 
             {/* Price Range */}
             <View style={styles.section}>
               <Typography variant="body" weight="600" style={styles.sectionTitle}>
-                Price range
+                {t("shop.filters.priceRange")}
               </Typography>
               <View style={styles.priceRangeContainer}>
                 <Typography variant="bodySmall" style={styles.priceText}>
@@ -250,7 +252,7 @@ export function FilterModal({
             {/* Colors */}
             <View style={styles.section}>
               <Typography variant="body" weight="600" style={styles.sectionTitle}>
-                Colors
+                {t("shop.filters.colors")}
               </Typography>
               <View style={styles.colorContainer}>
                 {COLORS.map((color) => {
@@ -265,7 +267,7 @@ export function FilterModal({
                       ]}
                       onPress={() => toggleColor(color)}
                       accessibilityRole="button"
-                      accessibilityLabel={`Select ${color} color`}
+                      accessibilityLabel={t("shop.filters.selectColor", { color })}
                       accessibilityState={{ selected: isSelected }}
                     />
                   );
@@ -276,7 +278,7 @@ export function FilterModal({
             {/* Sizes */}
             <View style={styles.section}>
               <Typography variant="body" weight="600" style={styles.sectionTitle}>
-                Sizes
+                {t("shop.filters.sizes")}
               </Typography>
               <View style={styles.sizeContainer}>
                 {SIZES.map((size) => {
@@ -290,7 +292,7 @@ export function FilterModal({
                       ]}
                       onPress={() => toggleSize(size)}
                       accessibilityRole="button"
-                      accessibilityLabel={`Select size ${size}`}
+                      accessibilityLabel={t("shop.filters.selectSize", { size })}
                       accessibilityState={{ selected: isSelected }}
                     >
                       <Typography
@@ -311,7 +313,7 @@ export function FilterModal({
             {/* Category */}
             <View style={styles.section}>
               <Typography variant="body" weight="600" style={styles.sectionTitle}>
-                Category
+                {t("shop.filters.category")}
               </Typography>
               <View style={styles.categoryContainer}>
                 {CATEGORIES.map((category) => {
@@ -325,7 +327,7 @@ export function FilterModal({
                       ]}
                       onPress={() => selectCategory(category)}
                       accessibilityRole="button"
-                      accessibilityLabel={`Select category ${category}`}
+                      accessibilityLabel={t("shop.filters.selectCategory", { category })}
                       accessibilityState={{ selected: isSelected }}
                     >
                       <Typography
@@ -360,17 +362,19 @@ export function FilterModal({
                 ]}
                 onPress={handleDiscard}
                 accessibilityRole="button"
-                accessibilityLabel="Discard filters"
+                accessibilityLabel={t("shop.filters.discardHint")}
               >
                 <Typography variant="button" customColor={colors.text}>
-                  Discard
+                  {t("shop.filters.discard")}
                 </Typography>
               </Pressable>
               <View style={styles.footerButton}>
                 <Button
-                  title="Apply"
+                  title={t("shop.filters.apply")}
                   onPress={handleApply}
-                  accessibilityLabel={`Apply ${activeFilterCount} filters`}
+                  accessibilityLabel={t("shop.filters.applyHint", {
+                    count: activeFilterCount,
+                  })}
                 />
               </View>
             </View>

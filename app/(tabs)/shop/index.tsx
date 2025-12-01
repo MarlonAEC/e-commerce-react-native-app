@@ -3,6 +3,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import { useGetCategoryListQuery } from "@/services/store-api/categories";
 import { formatCategoryName } from "@/utils/format-category-name";
 import { router } from "expo-router";
@@ -17,6 +18,7 @@ import {
 } from "react-native";
 
 export default function ShopScreen() {
+  const { t } = useTranslation();
   const { data: categories, isLoading, error } = useGetCategoryListQuery();
 
   const { styles, colors } = useThemedStyles((colors) => ({
@@ -71,8 +73,10 @@ export default function ShopScreen() {
         style={styles.categoryItem}
         onPress={() => handleCategoryPress(item)}
         accessibilityRole="button"
-        accessibilityLabel={`View ${displayName} category`}
-        accessibilityHint={`Double tap to view products in ${displayName} category`}
+        accessibilityLabel={t("shop.viewCategory", { category: displayName })}
+        accessibilityHint={t("shop.viewCategoryHint", {
+          category: displayName,
+        })}
       >
         <Typography variant="body" style={styles.categoryText}>
           {displayName}
@@ -90,7 +94,7 @@ export default function ShopScreen() {
           >
             <ActivityIndicator size="large" color={colors.tint} />
             <Typography variant="body" color="text" style={{ marginTop: 16 }}>
-              Loading categories...
+              {t("shop.loadingCategories")}
             </Typography>
           </View>
         </ThemedView>
@@ -106,7 +110,7 @@ export default function ShopScreen() {
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <Typography variant="body" color="text">
-              Error loading categories
+              {t("shop.errorLoadingCategories")}
             </Typography>
           </View>
         </ThemedView>
@@ -118,20 +122,20 @@ export default function ShopScreen() {
     <PageLayout shouldShowSafeArea={true} scrollable={false}>
       <ThemedView style={styles.container} scrollable={false}>
         <Typography variant="h1" style={styles.title}>
-          Categories
+          {t("shop.categories")}
         </Typography>
 
         <View style={styles.viewAllButton}>
           <Button
-            title="VIEW ALL ITEMS"
+            title={t("shop.viewAllItems")}
             onPress={handleViewAllItems}
-            accessibilityLabel="View all items"
-            accessibilityHint="View all products across all categories"
+            accessibilityLabel={t("shop.viewAllItems")}
+            accessibilityHint={t("shop.viewAllItemsHint")}
           />
         </View>
 
         <Typography variant="bodySmall" style={styles.chooseCategoryLabel}>
-          Choose category
+          {t("shop.chooseCategory")}
         </Typography>
 
         <FlatList

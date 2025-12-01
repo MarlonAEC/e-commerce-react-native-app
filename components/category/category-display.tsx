@@ -4,6 +4,7 @@ import { ThemedView } from "@/components/themed-view";
 import { ChevronLeftIcon } from "@/components/ui/svg-icons/chevron-left-icon";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import { ImageSource } from "expo-image";
 import React, { useMemo, useState } from "react";
 import { FlatList, Pressable, View, type ViewStyle } from "react-native";
@@ -91,6 +92,7 @@ export function CategoryDisplay({
   isLoadingMore = false,
   onLoadMore,
 }: CategoryDisplayProps) {
+  const { t } = useTranslation();
   const [sortOption, setSortOption] = useState<SortOption | undefined>();
   const [filters, setFilters] = useState<FilterOptions>({});
   const [showSortModal, setShowSortModal] = useState(false);
@@ -250,8 +252,8 @@ export function CategoryDisplay({
                   style={styles.backButton}
                   onPress={onBackPress}
                   accessibilityRole="button"
-                  accessibilityLabel="Go back"
-                  accessibilityHint="Navigate back to previous screen"
+                  accessibilityLabel={t("shop.goBack")}
+                  accessibilityHint={t("shop.goBackHint")}
                 >
                   <ChevronLeftIcon fill={colors.text} />
                 </Pressable>
@@ -285,7 +287,7 @@ export function CategoryDisplay({
               }}
             >
               <Typography variant="body" color="text">
-                Loading products...
+                {t("shop.loadingProducts")}
               </Typography>
             </View>
           ) : error ? (
@@ -309,7 +311,7 @@ export function CategoryDisplay({
               }}
             >
               <Typography variant="body" color="text">
-                No products found
+                {t("shop.noProductsFound")}
               </Typography>
             </View>
           ) : (
@@ -335,7 +337,7 @@ export function CategoryDisplay({
                     }}
                   >
                     <Typography variant="bodySmall" color="text">
-                      Loading more...
+                      {t("shop.loadingMore")}
                     </Typography>
                   </View>
                 ) : null

@@ -1,51 +1,98 @@
 {
   "tabs": {
-    "home": "Inicio",
-    "shop": "Tienda",
-    "bag": "Bolsa",
-    "favorites": "Favoritos",
-    "profile": "Perfil"
+    "home": "Accueil",
+    "shop": "Boutique",
+    "bag": "Panier",
+    "favorites": "Favoris",
+    "profile": "Profil"
   },
   "common": {
-    "welcome": "Bienvenido",
-    "loading": "Cargando...",
-    "error": "Ocurrió un error",
-    "retry": "Reintentar",
-    "cancel": "Cancelar",
-    "save": "Guardar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "back": "Atrás",
-    "next": "Siguiente",
-    "done": "Hecho"
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "done": "Terminé"
   },
   "home": {
-    "title": "Inicio",
-    "greeting": "¡Hola, bienvenido a nuestra tienda!"
+    "title": "Accueil",
+    "greeting": "Bonjour, bienvenue dans notre magasin !"
   },
   "shop": {
-    "title": "Tienda",
-    "products": "Productos",
-    "categories": "Categorías"
+    "title": "Boutique",
+    "products": "Produits",
+    "categories": "Catégories",
+    "viewAllItems": "VOIR TOUS LES ARTICLES",
+    "chooseCategory": "Choisir une catégorie",
+    "loadingCategories": "Chargement des catégories...",
+    "errorLoadingCategories": "Erreur lors du chargement des catégories",
+    "viewCategory": "Voir la catégorie {{category}}",
+    "viewCategoryHint": "Appuyez deux fois pour voir les produits de la catégorie {{category}}",
+    "viewAllItemsHint": "Voir tous les produits de toutes les catégories",
+    "loadingProducts": "Chargement des produits...",
+    "noProductsFound": "Aucun produit trouvé",
+    "loadingMore": "Chargement de plus...",
+    "failedToLoadProducts": "Échec du chargement des produits",
+    "goBack": "Retour",
+    "goBackHint": "Revenir à l'écran précédent",
+    "filters": {
+      "title": "Filtres",
+      "priceRange": "Gamme de prix",
+      "colors": "Couleurs",
+      "sizes": "Tailles",
+      "category": "Catégorie",
+      "selectColor": "Sélectionner la couleur {{color}}",
+      "selectSize": "Sélectionner la taille {{size}}",
+      "selectCategory": "Sélectionner la catégorie {{category}}",
+      "discard": "Annuler",
+      "discardHint": "Annuler les filtres",
+      "apply": "Appliquer",
+      "applyHint": "Appliquer {{count}} filtres",
+      "openFilters": "Ouvrir les filtres pour affiner les produits"
+    },
+    "sort": {
+      "title": "Trier",
+      "sortBy": "Trier par",
+      "openSort": "Ouvrir les options de tri",
+      "popular": "Populaire",
+      "newest": "Plus récent",
+      "customerReview": "Avis clients",
+      "priceLowHigh": "Prix : du plus bas au plus élevé",
+      "priceHighLow": "Prix : du plus élevé au plus bas"
+    },
+    "product": {
+      "addToCart": "Ajouter au panier",
+      "addToCartHint": "Appuyez deux fois pour ajouter ce produit à votre panier",
+      "addToFavorites": "Ajouter aux favoris",
+      "removeFromFavorites": "Retirer des favoris",
+      "toggleFavoriteHint": "Appuyez deux fois pour basculer le statut favori",
+      "viewDetailsHint": "Appuyez deux fois pour voir les détails du produit",
+      "byBrand": " par {{brand}}"
+    }
   },
   "bag": {
-    "title": "Bolsa de Compras",
-    "empty": "Tu bolsa está vacía",
-    "items": "{{count}} artículo",
-    "items_plural": "{{count}} artículos",
+    "title": "Panier",
+    "empty": "Votre panier est vide",
+    "items": "{{count}} article",
+    "items_plural": "{{count}} articles",
     "total": "Total"
   },
   "favorites": {
-    "title": "Favoritos",
-    "empty": "Aún no tienes favoritos",
-    "remove": "Eliminar de favoritos"
+    "title": "Favoris",
+    "empty": "Aucun favori pour le moment",
+    "remove": "Retirer des favoris"
   },
   "profile": {
-    "title": "Perfil",
-    "settings": "Configuración",
-    "orders": "Pedidos",
-    "addresses": "Direcciones",
-    "payment": "Métodos de Pago"
+    "title": "Profil",
+    "settings": "Paramètres",
+    "orders": "Commandes",
+    "addresses": "Adresses",
+    "payment": "Méthodes de paiement"
   },
   "login": {
     "title": "Connexion",

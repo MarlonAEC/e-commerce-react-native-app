@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import { FavoriteHeartIcon } from "./ui/svg-icons/favorite-heart-icon";
 import { StarIcon } from "./ui/svg-icons/star-icon";
 import { Typography } from "./ui/typography";
@@ -87,6 +88,7 @@ export default function ProductTile({
   onAddToCartPress,
   accessibilityLabel,
 }: ProductTileProps) {
+  const { t } = useTranslation();
   const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       width: "100%",
@@ -232,7 +234,8 @@ export default function ProductTile({
   };
 
   const defaultAccessibilityLabel =
-    accessibilityLabel || `${title}${brand ? ` by ${brand}` : ""}`;
+    accessibilityLabel ||
+    `${title}${brand ? t("shop.product.byBrand", { brand }) : ""}`;
 
   return (
     <Pressable
@@ -241,7 +244,7 @@ export default function ProductTile({
       accessibilityRole="button"
       accessibilityLabel={defaultAccessibilityLabel}
       accessibilityHint={
-        onPress ? "Double tap to view product details" : undefined
+        onPress ? t("shop.product.viewDetailsHint") : undefined
       }
     >
       {/* Image Container */}
@@ -271,9 +274,11 @@ export default function ProductTile({
           }}
           accessibilityRole="button"
           accessibilityLabel={
-            isFavorite ? "Remove from favorites" : "Add to favorites"
+            isFavorite
+              ? t("shop.product.removeFromFavorites")
+              : t("shop.product.addToFavorites")
           }
-          accessibilityHint="Double tap to toggle favorite status"
+          accessibilityHint={t("shop.product.toggleFavoriteHint")}
         >
           <FavoriteHeartIcon
             fill={isFavorite ? colors.tint : colors.disabled}
@@ -333,11 +338,11 @@ export default function ProductTile({
               onAddToCartPress();
             }}
             accessibilityRole="button"
-            accessibilityLabel="Add to cart"
-            accessibilityHint="Double tap to add this product to your cart"
+            accessibilityLabel={t("shop.product.addToCart")}
+            accessibilityHint={t("shop.product.addToCartHint")}
           >
             <Typography variant="caption" style={styles.addToCartButtonText}>
-              Add to Cart
+              {t("shop.product.addToCart")}
             </Typography>
           </TouchableOpacity>
         )}

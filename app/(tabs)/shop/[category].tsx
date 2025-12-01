@@ -3,6 +3,7 @@ import {
   ProductData,
 } from "@/components/category/category-display";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit";
+import { useTranslation } from "@/hooks/use-translation";
 import { addToCart } from "@/redux/cart/cart-slice";
 import { logger } from "@/services/logger";
 import {
@@ -17,6 +18,7 @@ import { useEffect, useState } from "react";
 const LIMIT = 16; // Number of products to fetch per page
 
 export default function CategoryDetailScreen() {
+  const { t } = useTranslation();
   const { category } = useLocalSearchParams<{ category: string }>();
   const [skip, setSkip] = useState(0);
   const [allProducts, setAllProducts] = useState<ProductData[]>([]);
@@ -177,7 +179,7 @@ export default function CategoryDetailScreen() {
       title={categoryName}
       products={allProducts}
       isLoading={isLoading && skip === 0} // Only show loading on initial load
-      error={error ? "Failed to load products" : null}
+      error={error ? t("shop.failedToLoadProducts") : null}
       onProductPress={(product) => console.log(`Product ${product.id} pressed`)}
       onFavoritePress={(product) =>
         console.log(`Favorite toggled for ${product.id}`)

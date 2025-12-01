@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import React from "react";
 import { Modal, Pressable, View, type ViewStyle } from "react-native";
 import { SortOption, getSortDisplayText } from "./filter-sort-bar";
@@ -42,7 +42,8 @@ export function SortModal({
   onSelectSort,
   onClose,
 }: SortModalProps) {
-  const { styles, colors } = useThemedStyles((colors) => ({
+  const { t } = useTranslation();
+  const { styles } = useThemedStyles((colors) => ({
     modalOverlay: {
       flex: 1,
       backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -117,12 +118,12 @@ export function SortModal({
         >
           <View style={styles.dragHandle} />
           <Typography variant="h4" style={styles.title}>
-            Sort by
+            {t("shop.sort.sortBy")}
           </Typography>
 
           {SORT_OPTIONS.map((option) => {
             const isSelected = currentSort === option;
-            const displayText = getSortDisplayText(option);
+            const displayText = getSortDisplayText(option, t);
 
             return (
               <Pressable
@@ -155,4 +156,3 @@ export function SortModal({
     </Modal>
   );
 }
-
