@@ -15,6 +15,8 @@ export const Colors = {
     tint: tintColorLight,
     border: "#E5E5E5",
     icon: "#DB3022",
+    starDisabled: "#E5E5E5",
+    starFilled: "#FFBA49",
     tabIconDefault: "#9B9B9B", // Gray for inactive tabs
     tabIconSelected: tintColorLight, // Red for active tab
     disabled: "#9B9B9B",
@@ -23,6 +25,8 @@ export const Colors = {
     text: "#ECEDEE",
     background: "#151718",
     tint: tintColorDark,
+    starDisabled: "#E5E5E5",
+    starFilled: "#FFBA49",
     border: "#2A2A2A",
     icon: "#DB3022",
     tabIconDefault: "#9BA1A6", // Gray for inactive tabs

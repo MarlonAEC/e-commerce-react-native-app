@@ -4,19 +4,31 @@ import { PlusIcon } from "@/components/ui/svg-icons/plus-icon";
 import { ThreeDotsIcon } from "@/components/ui/svg-icons/three-dots-icon";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
-import { Image, Platform, TouchableOpacity } from "react-native";
+import { useRef, useState } from "react";
+import {
+  Dimensions,
+  Image,
+  Modal,
+  Platform,
+  Pressable,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from "react-native";
 
 type BagItemProps = {
   thumbnail: string;
   name: string;
   color: string;
   id: string;
-  price: number;
+  price: number; // Original price per unit
   quantity: number;
-  totalPrice: number;
+  totalPrice: number; // Original total price
+  discountedPrice: number; // Discounted price per unit
+  discountedTotal: number; // Discounted total price
   discountPercentage: number;
-  discountedTotal: number;
   onQuantityChange: (quantity: number) => void;
+  onRemove?: () => void;
 };
 
 export default function BagItem({
@@ -27,15 +39,25 @@ export default function BagItem({
   price,
   quantity,
   totalPrice,
-  discountPercentage,
+  discountedPrice,
   discountedTotal,
+  discountPercentage,
   onQuantityChange,
+  onRemove,
 }: BagItemProps) {
-  const { styles } = useThemedStyles((colors) => ({
+  const [showDropdown, setShowDropdown] = useState(false);
+  const buttonRef = useRef<View>(null);
+  const [buttonPosition, setButtonPosition] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       backgroundColor: colors.background,
       width: "100%",
-      height: 104, // Fixed height, not minHeight
+      minHeight: 104, // Minimum height, but can grow
       flexDirection: "row",
       marginBottom: 16,
       borderRadius: 8,
@@ -57,11 +79,11 @@ export default function BagItem({
       flexDirection: "row",
       borderRadius: 8,
       overflow: "hidden", // Clip children to border radius
-      height: 104, // Fixed height to match container
     },
     imageContainer: {
       width: 104,
-      height: 104, // Fixed height to match container
+      minHeight: 104, // Minimum height to match min container height
+      maxHeight: 150, // Maximum height to prevent card from getting too large
       overflow: "hidden",
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
@@ -69,19 +91,20 @@ export default function BagItem({
     image: {
       width: "100%",
       height: "100%",
+      minHeight: 104, // Match minimum container height
+      maxHeight: 150, // Match maximum container height
     },
     detailsContainer: {
       flex: 1,
       flexDirection: "column",
       paddingHorizontal: 12,
-      paddingVertical: 10, // Reduced from 16 to fit 104px height
-      justifyContent: "space-between",
+      paddingVertical: 12,
     },
     topRow: {
       flexDirection: "row",
       alignItems: "flex-start",
       justifyContent: "space-between",
-      marginBottom: 6, // Reduced from 8 to fit 104px height
+      marginBottom: 8,
     },
     nameAndAttributes: {
       flex: 1,
@@ -89,7 +112,16 @@ export default function BagItem({
       marginRight: 8,
     },
     productName: {
-      marginBottom: 2, // Reduced from 4 to fit 104px height
+      marginBottom: 8,
+    },
+    colorAndPriceRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 12,
+    },
+    colorContainer: {
+      flex: 1,
     },
     attributesRow: {
       flexDirection: "row",
@@ -98,11 +130,14 @@ export default function BagItem({
     },
     threeDotsButton: {
       padding: 4,
-    },
-    bottomRow: {
+      position: "relative",
+    } as ViewStyle,
+    threeDotsContainer: {
+      position: "relative",
+    } as ViewStyle,
+    quantityRow: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
     },
     quantityContainer: {
       flexDirection: "row",
@@ -132,7 +167,55 @@ export default function BagItem({
       minWidth: 20,
       textAlign: "center",
     },
-    priceText: {
+    priceContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    } as ViewStyle,
+    originalPriceText: {
+      textDecorationLine: "line-through",
+      opacity: 0.5,
+    },
+    discountedPriceText: {
+      fontWeight: "600",
+    },
+    dropdownContainer: {
+      position: "absolute",
+      top: -5,
+      right: 0,
+      backgroundColor: colors.background,
+      borderRadius: 8,
+      minWidth: 160,
+      // Box shadow
+      ...(Platform.OS === "ios"
+        ? {
+            shadowColor: "#000000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 8,
+          }
+        : {
+            elevation: 8,
+          }),
+      borderWidth: 1,
+      borderColor: colors.border,
+      zIndex: 1000,
+    } as ViewStyle,
+    dropdownOption: {
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    } as ViewStyle,
+    dropdownOptionLast: {
+      borderBottomWidth: 0,
+    } as ViewStyle,
+    dropdownOptionText: {
+      fontSize: 16,
+      color: colors.text,
+    },
+    dropdownOptionTextDanger: {
+      color: colors.tint,
       fontWeight: "600",
     },
   }));
@@ -146,13 +229,13 @@ export default function BagItem({
       <ThemedView style={styles.innerContainer}>
         <ThemedView style={styles.imageContainer}>
           <Image
-            source={require("@/assets/images/categories/image-1.png")}
+            source={{ uri: thumbnail }}
             style={styles.image}
             resizeMode="cover"
           />
         </ThemedView>
         <ThemedView style={styles.detailsContainer}>
-          {/* Top Row: Product Name, Attributes, and Three Dots */}
+          {/* Top Row: Product Name and Three Dots */}
           <ThemedView style={styles.topRow}>
             <ThemedView style={styles.nameAndAttributes}>
               <Typography
@@ -160,21 +243,122 @@ export default function BagItem({
                 weight="700"
                 style={styles.productName}
               >
-                {name}
+                {name.length > 20 ? `${name.substring(0, 20)}...` : name}
               </Typography>
-              <ThemedView style={styles.attributesRow}>
-                <Typography variant="bodySmall" color="disabled">
-                  Color: {color}
-                </Typography>
-              </ThemedView>
             </ThemedView>
-            <TouchableOpacity style={styles.threeDotsButton}>
-              <ThreeDotsIcon />
-            </TouchableOpacity>
+            <View style={styles.threeDotsContainer}>
+              <View ref={buttonRef}>
+                <TouchableOpacity
+                  style={styles.threeDotsButton}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    // Measure button position when pressed
+                    buttonRef.current?.measure(
+                      (fx, fy, fwidth, fheight, px, py) => {
+                        setButtonPosition({
+                          x: px,
+                          y: py,
+                          width: fwidth,
+                          height: fheight,
+                        });
+                        setShowDropdown(!showDropdown);
+                      }
+                    );
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel="More options"
+                  accessibilityHint="Open menu to remove item from cart"
+                >
+                  <ThreeDotsIcon />
+                </TouchableOpacity>
+              </View>
+              {showDropdown && buttonPosition && (
+                <Modal
+                  visible={showDropdown}
+                  transparent
+                  animationType="fade"
+                  onRequestClose={() => setShowDropdown(false)}
+                >
+                  <Pressable
+                    style={{
+                      flex: 1,
+                      backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    }}
+                    onPress={() => setShowDropdown(false)}
+                  >
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: buttonPosition.y + buttonPosition.height + 4,
+                        right:
+                          Dimensions.get("window").width -
+                          buttonPosition.x -
+                          buttonPosition.width,
+                      }}
+                    >
+                      <View style={styles.dropdownContainer}>
+                        {onRemove && (
+                          <Pressable
+                            style={[
+                              styles.dropdownOption,
+                              styles.dropdownOptionLast,
+                            ]}
+                            onPress={() => {
+                              onRemove();
+                              setShowDropdown(false);
+                            }}
+                            accessibilityRole="button"
+                            accessibilityLabel="Remove"
+                            accessibilityHint="Remove this item from your cart"
+                          >
+                            <Typography
+                              variant="body"
+                              style={[
+                                styles.dropdownOptionText,
+                                styles.dropdownOptionTextDanger,
+                              ]}
+                            >
+                              Remove
+                            </Typography>
+                          </Pressable>
+                        )}
+                      </View>
+                    </View>
+                  </Pressable>
+                </Modal>
+              )}
+            </View>
           </ThemedView>
 
-          {/* Bottom Row: Quantity Controls and Price */}
-          <ThemedView style={styles.bottomRow}>
+          {/* Second Row: Color and Price */}
+          <ThemedView style={styles.colorAndPriceRow}>
+            <ThemedView style={styles.colorContainer}>
+              <Typography variant="bodySmall" color="disabled">
+                Color: {color}
+              </Typography>
+            </ThemedView>
+            <View style={styles.priceContainer}>
+              {totalPrice > discountedTotal && (
+                <Typography
+                  variant="bodySmall"
+                  style={styles.originalPriceText}
+                >
+                  ${totalPrice.toFixed(2)}
+                </Typography>
+              )}
+              <Typography
+                variant="body"
+                weight="600"
+                customColor={colors.tint}
+                style={styles.discountedPriceText}
+              >
+                ${discountedTotal.toFixed(2)}
+              </Typography>
+            </View>
+          </ThemedView>
+
+          {/* Third Row: Quantity Controls */}
+          <ThemedView style={styles.quantityRow}>
             <ThemedView style={styles.quantityContainer}>
               <TouchableOpacity
                 onPress={() => handleQuantityChange(-1)}
@@ -192,9 +376,6 @@ export default function BagItem({
                 <PlusIcon />
               </TouchableOpacity>
             </ThemedView>
-            <Typography variant="body" weight="600" style={styles.priceText}>
-              ${price}
-            </Typography>
           </ThemedView>
         </ThemedView>
       </ThemedView>

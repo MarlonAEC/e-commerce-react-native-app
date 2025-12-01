@@ -9,6 +9,7 @@ import {
   decrementQuantity,
   incrementQuantity,
   loadCart,
+  removeProductFromCart,
   selectCart,
   selectCartError,
   selectCartLoading,
@@ -52,20 +53,24 @@ export default function BagScreen() {
       name: product.title,
       color: "N/A", // Color is not available in the cart
       id: product.id.toString(),
-      price: product.price,
+      price: product.price, // Original price per unit
       quantity: product.quantity,
-      totalPrice: product.total,
+      totalPrice: product.total, // Original total price for this item
+      discountedPrice: product.discountedTotal / product.quantity, // Discounted price per unit
+      discountedTotal: product.discountedTotal, // Discounted total for this item
       discountPercentage: product.discountPercentage,
-      discountedTotal: product.discountedTotal,
     }));
   }, [cart]);
 
-  // Calculate total amount from cart data
+  // Calculate total amounts from cart data
   const totalAmount = useMemo(() => {
     if (!cart) {
-      return 0;
+      return { total: 0, discountedTotal: 0 };
     }
-    return cart.discountedTotal;
+    return {
+      total: cart.total,
+      discountedTotal: cart.discountedTotal,
+    };
   }, [cart]);
 
   const { styles, colors } = useThemedStyles((colors) => ({
@@ -101,7 +106,7 @@ export default function BagScreen() {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: 24,
+      marginBottom: 12,
     } as ViewStyle,
     checkoutButton: {
       marginTop: 0,
@@ -111,6 +116,19 @@ export default function BagScreen() {
   const handleCheckout = () => {
     // TODO: Implement checkout logic
     console.log("Checkout pressed");
+  };
+
+  const handleRemoveProduct = async (productId: string) => {
+    const productIdNum = parseInt(productId, 10);
+    if (isNaN(productIdNum)) {
+      return;
+    }
+    try {
+      await dispatch(removeProductFromCart(productIdNum)).unwrap();
+    } catch (error) {
+      // Error is handled by Redux
+      console.error("Failed to remove product from cart", error);
+    }
   };
 
   const handleQuantityChange = (itemId: string, newQuantity: number) => {
@@ -208,6 +226,7 @@ export default function BagScreen() {
                 onQuantityChange={(newQuantity: number) =>
                   handleQuantityChange(item.id, newQuantity)
                 }
+                onRemove={() => handleRemoveProduct(item.id)}
               />
             )}
             keyExtractor={(item) => item.id}
@@ -221,12 +240,26 @@ export default function BagScreen() {
 
         {/* Total Amount and Checkout Button */}
         <View style={styles.totalSection}>
+          {totalAmount.total > totalAmount.discountedTotal && (
+            <View style={styles.totalRow}>
+              <Typography variant="body" color="text">
+                Original Price:
+              </Typography>
+              <Typography
+                variant="body"
+                weight="600"
+                style={{ textDecorationLine: "line-through", opacity: 0.5 }}
+              >
+                ${totalAmount.total.toFixed(2)}
+              </Typography>
+            </View>
+          )}
           <View style={styles.totalRow}>
             <Typography variant="body" color="text">
-              Total amount:
+              Total:
             </Typography>
-            <Typography variant="body" weight="600" color="text">
-              ${totalAmount.toFixed(2)}
+            <Typography variant="body" weight="600" customColor={colors.tint}>
+              ${totalAmount.discountedTotal.toFixed(2)}
             </Typography>
           </View>
           <Button
