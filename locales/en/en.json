@@ -111,7 +111,9 @@
     "remove": "Remove from favorites",
     "quickAddToCart": "Quick add to cart",
     "quickAddToCartHint": "Add this product to your cart",
-    "listHint": "List of {{count}} favorite products. Swipe to browse."
+    "listHint": "List of {{count}} favorite products. Swipe to browse.",
+    "item": "favorite",
+    "items": "{{count}} favorites"
   },
   "profile": {
     "title": "Profile",

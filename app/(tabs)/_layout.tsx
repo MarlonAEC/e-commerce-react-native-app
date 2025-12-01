@@ -1,7 +1,7 @@
 import { Redirect, Tabs } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Platform } from "react-native";
+import { Platform, Text, View, type ViewStyle } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { BagIcon } from "@/components/ui/svg-icons/bag-icon";
@@ -10,11 +10,18 @@ import { HomeIcon } from "@/components/ui/svg-icons/home-icon";
 import { ProfileIcon } from "@/components/ui/svg-icons/profile-icon";
 import { ShopIcon } from "@/components/ui/svg-icons/shop-icon";
 import { useSession } from "@/context/session-context";
+import { useAppSelector } from "@/hooks/use-redux-toolkit";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { selectCart } from "@/redux/cart/cart-slice";
+import { selectFavorites } from "@/redux/favorites/favorites-slice";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const { session, isLoading } = useSession();
+  const cart = useAppSelector(selectCart);
+  const cartItemCount = cart?.totalQuantity || 0;
+  const favorites = useAppSelector(selectFavorites);
+  const favoritesCount = favorites.length;
   const { styles, colors } = useThemedStyles((colors) => ({
     container: {
       flex: 1,
@@ -52,6 +59,29 @@ export default function TabLayout() {
     tabBarItemStyle: {
       paddingVertical: 4,
     },
+    badgeContainer: {
+      position: "absolute",
+      top: -4,
+      right: -8,
+      backgroundColor: "#DB3022", // Red color for badge
+      borderRadius: 10,
+      minWidth: 20,
+      height: 20,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingHorizontal: 6,
+      borderWidth: 2,
+      borderColor: colors.background, // Match tab bar background
+    } as ViewStyle,
+    badgeText: {
+      color: "#FFFFFF",
+      fontSize: 11,
+      fontWeight: "700",
+      textAlign: "center",
+    },
+    iconContainer: {
+      position: "relative",
+    } as ViewStyle,
   }));
 
   // Show nothing while loading to prevent flicker
@@ -109,9 +139,23 @@ export default function TabLayout() {
         options={{
           title: t("tabs.bag"),
           tabBarIcon: ({ color, focused }) => (
-            <BagIcon fill={focused ? color : "#fff"} stroke={color} />
+            <View style={styles.iconContainer}>
+              <BagIcon fill={focused ? color : "#fff"} stroke={color} />
+              {cartItemCount > 0 && (
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>
+                    {cartItemCount > 99 ? "99+" : cartItemCount}
+                  </Text>
+                </View>
+              )}
+            </View>
           ),
-          tabBarAccessibilityLabel: t("tabs.bag"),
+          tabBarAccessibilityLabel:
+            cartItemCount > 0
+              ? `${t("tabs.bag")}, ${cartItemCount} ${t("bag.items", {
+                  count: cartItemCount,
+                })}`
+              : t("tabs.bag"),
         }}
       />
       <Tabs.Screen
@@ -119,9 +163,23 @@ export default function TabLayout() {
         options={{
           title: t("tabs.favorites"),
           tabBarIcon: ({ color, focused }) => (
-            <HeartIcon fill={focused ? color : "#fff"} stroke={color} />
+            <View style={styles.iconContainer}>
+              <HeartIcon fill={focused ? color : "#fff"} stroke={color} />
+              {favoritesCount > 0 && (
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>
+                    {favoritesCount > 99 ? "99+" : favoritesCount}
+                  </Text>
+                </View>
+              )}
+            </View>
           ),
-          tabBarAccessibilityLabel: t("tabs.favorites"),
+          tabBarAccessibilityLabel:
+            favoritesCount > 0
+              ? `${t("tabs.favorites")}, ${t("favorites.items", {
+                  count: favoritesCount,
+                })}`
+              : t("tabs.favorites"),
         }}
       />
       <Tabs.Screen

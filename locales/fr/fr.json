@@ -111,7 +111,9 @@
     "remove": "Retirer des favoris",
     "quickAddToCart": "Ajout rapide au panier",
     "quickAddToCartHint": "Ajouter ce produit à votre panier",
-    "listHint": "Liste de {{count}} produits favoris. Balayez pour parcourir."
+    "listHint": "Liste de {{count}} produits favoris. Balayez pour parcourir.",
+    "item": "favori",
+    "items": "{{count}} favoris"
   },
   "profile": {
     "title": "Profil",

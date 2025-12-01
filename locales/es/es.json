@@ -43,7 +43,9 @@
     "remove": "Eliminar de favoritos",
     "quickAddToCart": "Agregar rápidamente al carrito",
     "quickAddToCartHint": "Agregar este producto a tu carrito",
-    "listHint": "Lista de {{count}} productos favoritos. Desliza para navegar."
+    "listHint": "Lista de {{count}} productos favoritos. Desliza para navegar.",
+    "item": "favorito",
+    "items": "{{count}} favoritos"
   },
   "profile": {
     "title": "Perfil",
