@@ -1,3 +1,4 @@
+import { AnimatedThemedView } from "@/components/animated-themed-view";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   View,
   type ViewStyle,
 } from "react-native";
+import { ThemedView } from "../themed-view";
 import { CheckMarkIcon } from "./svg-icons/check-mark-icon";
 
 type CustomInputProps = TextInputProps & {
@@ -55,7 +57,7 @@ export default function CustomInput({
       minHeight: 64,
       borderWidth: 0,
       borderRadius: 4,
-      backgroundColor: "#FFFFFF",
+      backgroundColor: colors.background,
       paddingHorizontal: 16,
       justifyContent: "center",
       position: "relative",
@@ -64,7 +66,7 @@ export default function CustomInput({
         ? {
             shadowColor: "#000000",
             shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.05,
+            shadowOpacity: colors.background === "#151718" ? 0.5 : 0.05,
             shadowRadius: 8,
           }
         : {
@@ -146,8 +148,8 @@ export default function CustomInput({
   const displayLabel = label || placeholder;
 
   return (
-    <View style={styles.container}>
-      <Animated.View
+    <ThemedView style={styles.container}>
+      <AnimatedThemedView
         style={[
           styles.inputContainer,
           {
@@ -197,7 +199,7 @@ export default function CustomInput({
             <CheckMarkIcon />
           </View>
         )}
-      </Animated.View>
-    </View>
+      </AnimatedThemedView>
+    </ThemedView>
   );
 }

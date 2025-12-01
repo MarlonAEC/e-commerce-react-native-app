@@ -184,7 +184,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <PageLayout shouldShowSafeArea={false}>
+    <PageLayout shouldShowSafeArea={true}>
       <ThemedView style={styles.container} scrollable={false}>
         <View
           style={styles.formContainer}
