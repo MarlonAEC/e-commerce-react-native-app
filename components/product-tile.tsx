@@ -120,7 +120,7 @@ export default function ProductTile({
       zIndex: 1,
     } as ViewStyle,
     discountText: {
-      color: colors.background,
+      color: colors.text,
       fontSize: 12,
       fontWeight: "600",
     },
@@ -134,7 +134,7 @@ export default function ProductTile({
       justifyContent: "center",
     } as ViewStyle,
     addToCartButtonText: {
-      color: colors.background,
+      color: colors.text,
       fontSize: 12,
       fontWeight: "600",
     },

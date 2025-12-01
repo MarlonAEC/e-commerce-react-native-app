@@ -4,6 +4,7 @@ import { PlusIcon } from "@/components/ui/svg-icons/plus-icon";
 import { ThreeDotsIcon } from "@/components/ui/svg-icons/three-dots-icon";
 import { Typography } from "@/components/ui/typography";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import { useRef, useState } from "react";
 import {
   Dimensions,
@@ -45,6 +46,7 @@ export default function BagItem({
   onQuantityChange,
   onRemove,
 }: BagItemProps) {
+  const { t } = useTranslation();
   const [showDropdown, setShowDropdown] = useState(false);
   const buttonRef = useRef<View>(null);
   const [buttonPosition, setButtonPosition] = useState<{
@@ -151,12 +153,15 @@ export default function BagItem({
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: colors.background,
+      borderWidth: colors.background === "#151718" ? 1 : 0,
+      borderColor:
+        colors.background === "#151718" ? colors.border : "transparent",
       // Box shadow: 0px 1px 8px rgba(0, 0, 0, 0.05)
       ...(Platform.OS === "ios"
         ? {
             shadowColor: "#000000",
             shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.1,
+            shadowOpacity: colors.background === "#151718" ? 0.5 : 0.15,
             shadowRadius: 8,
           }
         : {
@@ -266,8 +271,8 @@ export default function BagItem({
                     );
                   }}
                   accessibilityRole="button"
-                  accessibilityLabel="More options"
-                  accessibilityHint="Open menu to remove item from cart"
+                  accessibilityLabel={t("bag.item.moreOptions")}
+                  accessibilityHint={t("bag.item.moreOptionsHint")}
                 >
                   <ThreeDotsIcon />
                 </TouchableOpacity>
@@ -308,8 +313,8 @@ export default function BagItem({
                               setShowDropdown(false);
                             }}
                             accessibilityRole="button"
-                            accessibilityLabel="Remove"
-                            accessibilityHint="Remove this item from your cart"
+                            accessibilityLabel={t("bag.item.remove")}
+                            accessibilityHint={t("bag.item.removeHint")}
                           >
                             <Typography
                               variant="body"
@@ -318,7 +323,7 @@ export default function BagItem({
                                 styles.dropdownOptionTextDanger,
                               ]}
                             >
-                              Remove
+                              {t("bag.item.remove")}
                             </Typography>
                           </Pressable>
                         )}
@@ -334,7 +339,7 @@ export default function BagItem({
           <ThemedView style={styles.colorAndPriceRow}>
             <ThemedView style={styles.colorContainer}>
               <Typography variant="bodySmall" color="disabled">
-                Color: {color}
+                {t("bag.item.color", { color })}
               </Typography>
             </ThemedView>
             <View style={styles.priceContainer}>
@@ -363,15 +368,25 @@ export default function BagItem({
               <TouchableOpacity
                 onPress={() => handleQuantityChange(-1)}
                 style={styles.quantityIconContainer}
+                accessibilityRole="button"
+                accessibilityLabel={t("bag.item.decreaseQuantity")}
+                accessibilityHint={t("bag.item.decreaseQuantityHint")}
               >
                 <MinusIcon />
               </TouchableOpacity>
-              <Typography variant="body" style={styles.quantityText}>
+              <Typography
+                variant="body"
+                style={styles.quantityText}
+                accessibilityLabel={t("bag.item.quantity", { quantity })}
+              >
                 {quantity}
               </Typography>
               <TouchableOpacity
                 onPress={() => handleQuantityChange(1)}
                 style={styles.quantityIconContainer}
+                accessibilityRole="button"
+                accessibilityLabel={t("bag.item.increaseQuantity")}
+                accessibilityHint={t("bag.item.increaseQuantityHint")}
               >
                 <PlusIcon />
               </TouchableOpacity>

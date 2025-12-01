@@ -77,10 +77,31 @@
   },
   "bag": {
     "title": "Panier",
+    "myBag": "Mon panier",
     "empty": "Votre panier est vide",
+    "addItemsToGetStarted": "Ajoutez quelques articles pour commencer",
     "items": "{{count}} article",
     "items_plural": "{{count}} articles",
-    "total": "Total"
+    "total": "Total",
+    "originalPrice": "Prix d'origine :",
+    "loadingBag": "Chargement de votre panier...",
+    "errorLoadingCart": "Erreur lors du chargement du panier",
+    "tryAgainLater": "Veuillez réessayer plus tard",
+    "checkout": "VALIDER",
+    "checkoutLabel": "Valider la commande",
+    "checkoutHint": "Procéder au paiement avec vos articles sélectionnés",
+    "item": {
+      "moreOptions": "Plus d'options",
+      "moreOptionsHint": "Ouvrir le menu pour retirer l'article du panier",
+      "remove": "Retirer",
+      "removeHint": "Retirer cet article de votre panier",
+      "color": "Couleur : {{color}}",
+      "decreaseQuantity": "Diminuer la quantité",
+      "decreaseQuantityHint": "Appuyez deux fois pour diminuer la quantité de un",
+      "increaseQuantity": "Augmenter la quantité",
+      "increaseQuantityHint": "Appuyez deux fois pour augmenter la quantité de un",
+      "quantity": "Quantité : {{quantity}}"
+    }
   },
   "favorites": {
     "title": "Favoris",

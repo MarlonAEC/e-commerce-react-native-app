@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit";
 import { useThemedStyles } from "@/hooks/use-themed-styles";
+import { useTranslation } from "@/hooks/use-translation";
 import {
   decrementQuantity,
   incrementQuantity,
@@ -25,6 +26,7 @@ import {
 import BagItem from "../../components/bag-item";
 
 export default function BagScreen() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   // Get logged-in user from Redux
   const user = useAppSelector((state) => state.auth.user);
@@ -154,7 +156,7 @@ export default function BagScreen() {
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.tint} />
             <Typography variant="body" color="text" style={{ marginTop: 16 }}>
-              Loading your bag...
+              {t("bag.loadingBag")}
             </Typography>
           </View>
         </ThemedView>
@@ -169,7 +171,7 @@ export default function BagScreen() {
         <ThemedView style={styles.mainContainer} scrollable={false}>
           <View style={styles.emptyContainer}>
             <Typography variant="h3" color="text" align="center">
-              Error loading cart
+              {t("bag.errorLoadingCart")}
             </Typography>
             <Typography
               variant="body"
@@ -177,7 +179,7 @@ export default function BagScreen() {
               align="center"
               style={{ marginTop: 8 }}
             >
-              Please try again later
+              {t("bag.tryAgainLater")}
             </Typography>
           </View>
         </ThemedView>
@@ -191,11 +193,11 @@ export default function BagScreen() {
       <PageLayout shouldShowSafeArea={true} scrollable={false}>
         <ThemedView style={styles.mainContainer} scrollable={false}>
           <Typography variant="h1" style={styles.title}>
-            My Bag
+            {t("bag.myBag")}
           </Typography>
           <View style={styles.emptyContainer}>
             <Typography variant="h3" color="text" align="center">
-              Your bag is empty
+              {t("bag.empty")}
             </Typography>
             <Typography
               variant="body"
@@ -203,7 +205,7 @@ export default function BagScreen() {
               align="center"
               style={{ marginTop: 8 }}
             >
-              Add some items to get started
+              {t("bag.addItemsToGetStarted")}
             </Typography>
           </View>
         </ThemedView>
@@ -216,7 +218,7 @@ export default function BagScreen() {
       <ThemedView style={styles.mainContainer} scrollable={false}>
         <View style={styles.contentContainer}>
           <Typography variant="h1" style={styles.title}>
-            My Bag
+            {t("bag.myBag")}
           </Typography>
           <FlatList
             data={bagItems}
@@ -243,7 +245,7 @@ export default function BagScreen() {
           {totalAmount.total > totalAmount.discountedTotal && (
             <View style={styles.totalRow}>
               <Typography variant="body" color="text">
-                Original Price:
+                {t("bag.originalPrice")}
               </Typography>
               <Typography
                 variant="body"
@@ -256,18 +258,18 @@ export default function BagScreen() {
           )}
           <View style={styles.totalRow}>
             <Typography variant="body" color="text">
-              Total:
+              {t("bag.total")}:
             </Typography>
             <Typography variant="body" weight="600" customColor={colors.tint}>
               ${totalAmount.discountedTotal.toFixed(2)}
             </Typography>
           </View>
           <Button
-            title="CHECK OUT"
+            title={t("bag.checkout")}
             onPress={handleCheckout}
             buttonStyle={styles.checkoutButton}
-            accessibilityLabel="Checkout"
-            accessibilityHint="Proceed to checkout with your selected items"
+            accessibilityLabel={t("bag.checkoutLabel")}
+            accessibilityHint={t("bag.checkoutHint")}
           />
         </View>
       </ThemedView>

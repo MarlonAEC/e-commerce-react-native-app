@@ -75,7 +75,8 @@ export function Button({
       opacity: 0.6,
     } as ViewStyle,
     buttonText: {
-      color: colors.background,
+      // Not proud of this in a real app I will add an specific color but now I'm just lazy XD, lol
+      color: colors.background === "#151718" ? colors.text : colors.background,
       fontWeight: "600",
       textTransform: "uppercase",
       fontSize: 14,
@@ -113,4 +114,3 @@ export function Button({
     </Pressable>
   );
 }
-

@@ -106,7 +106,7 @@ export default function PageLayout({
     },
     safeAreaView: {
       flex: 1,
-      backgroundColor: "white",
+      backgroundColor: colors.background,
     },
   }));
   // Create a wrapper fallback that uses custom reset handler if provided

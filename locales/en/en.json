@@ -77,10 +77,31 @@
   },
   "bag": {
     "title": "Shopping Bag",
+    "myBag": "My Bag",
     "empty": "Your bag is empty",
+    "addItemsToGetStarted": "Add some items to get started",
     "items": "{{count}} item",
     "items_plural": "{{count}} items",
-    "total": "Total"
+    "total": "Total",
+    "originalPrice": "Original Price:",
+    "loadingBag": "Loading your bag...",
+    "errorLoadingCart": "Error loading cart",
+    "tryAgainLater": "Please try again later",
+    "checkout": "CHECK OUT",
+    "checkoutLabel": "Checkout",
+    "checkoutHint": "Proceed to checkout with your selected items",
+    "item": {
+      "moreOptions": "More options",
+      "moreOptionsHint": "Open menu to remove item from cart",
+      "remove": "Remove",
+      "removeHint": "Remove this item from your cart",
+      "color": "Color: {{color}}",
+      "decreaseQuantity": "Decrease quantity",
+      "decreaseQuantityHint": "Double tap to decrease quantity by one",
+      "increaseQuantity": "Increase quantity",
+      "increaseQuantityHint": "Double tap to increase quantity by one",
+      "quantity": "Quantity: {{quantity}}"
+    }
   },
   "favorites": {
     "title": "Favorites",
