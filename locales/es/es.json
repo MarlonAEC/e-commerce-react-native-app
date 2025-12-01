@@ -42,10 +42,11 @@
   },
   "profile": {
     "title": "Perfil",
-    "settings": "Configuración",
-    "orders": "Pedidos",
-    "addresses": "Direcciones",
-    "payment": "Métodos de Pago"
+    "myProfile": "Mi perfil",
+    "language": "Idioma",
+    "languageSubtitle": "Cambiar idioma de la aplicación",
+    "logout": "Cerrar sesión",
+    "logoutHint": "Cerrar sesión de tu cuenta"
   },
   "login": {
     "title": "Iniciar Sesión",
