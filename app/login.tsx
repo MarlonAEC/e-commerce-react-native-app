@@ -138,9 +138,6 @@ export default function LoginScreen() {
 
       // Update Redux state
       dispatch(setLoginResponse(result));
-
-      // Navigate after signing in
-      routerNavigation.replace("/(tabs)");
     } catch (err) {
       // Error is handled by RTK Query and available in loginError
       const error = err instanceof Error ? err : new Error(String(err));
