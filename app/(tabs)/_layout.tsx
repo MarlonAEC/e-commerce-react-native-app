@@ -1,4 +1,4 @@
-import { Redirect, Tabs } from "expo-router";
+import { Redirect, Tabs, useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, Text, View, type ViewStyle } from "react-native";
@@ -18,6 +18,7 @@ import { selectFavorites } from "@/redux/favorites/favorites-slice";
 export default function TabLayout() {
   const { t } = useTranslation();
   const { session, isLoading } = useSession();
+  const router = useRouter();
   const cart = useAppSelector(selectCart);
   const cartItemCount = cart?.totalQuantity || 0;
   const favorites = useAppSelector(selectFavorites);
@@ -132,6 +133,15 @@ export default function TabLayout() {
             />
           ),
           tabBarAccessibilityLabel: t("tabs.shop"),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default behavior
+            e.preventDefault();
+
+            // Navigate to shop tab and reset to index
+            router.push("/(tabs)/shop");
+          },
         }}
       />
       <Tabs.Screen

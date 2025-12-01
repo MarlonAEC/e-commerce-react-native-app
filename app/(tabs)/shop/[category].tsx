@@ -128,10 +128,9 @@ export default function CategoryDetailScreen() {
   const handleBackPress = () => {
     // Check if we came from the home tab
     if (from === "home") {
-      // Navigate back to home tab instead of using router.back()
-      // which would stay within the shop stack
-      // Use router.navigate to switch to the home tab
-      router.navigate("/(tabs)");
+      // Navigate back to home tab
+      // Note: The shop stack will be reset to index when the user taps the shop tab again
+      router.push("/(tabs)");
     } else {
       // Normal back navigation within the shop stack
       router.back();
