@@ -180,6 +180,7 @@ export default function FavoritesScreen() {
           onPress={() => handleProductPress(originalProduct)}
           onQuickAddToCartPress={() => handleQuickAddToCart(originalProduct)}
           onFavoritePress={() => handleRemoveFromFavorites(originalProduct.id)}
+          accessibilityLabel={`${item.title}${item.brand ? ` ${t("shop.product.byBrand", { brand: item.brand })}` : ""}`}
         />
       </View>
     );
@@ -189,8 +190,17 @@ export default function FavoritesScreen() {
     return (
       <PageLayout shouldShowSafeArea={true} scrollable={false}>
         <ThemedView style={styles.container} scrollable={false}>
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.tint} />
+          <View
+            style={styles.loadingContainer}
+            accessibilityLabel={t("favorites.loading")}
+            accessibilityRole="progressbar"
+            accessibilityState={{ busy: true }}
+          >
+            <ActivityIndicator
+              size="large"
+              color={colors.tint}
+              accessibilityLabel={t("favorites.loading")}
+            />
             <Typography variant="body" color="text" style={{ marginTop: 16 }}>
               {t("favorites.loading")}
             </Typography>
@@ -204,10 +214,19 @@ export default function FavoritesScreen() {
     return (
       <PageLayout shouldShowSafeArea={true} scrollable={false}>
         <ThemedView style={styles.container} scrollable={false}>
-          <Typography variant="h1" style={styles.title}>
+          <Typography
+            variant="h1"
+            style={styles.title}
+            accessibilityRole="header"
+            accessibilityLabel={t("favorites.title")}
+          >
             {t("favorites.title")}
           </Typography>
-          <View style={styles.emptyContainer}>
+          <View
+            style={styles.emptyContainer}
+            accessibilityLabel={`${t("favorites.empty")}. ${t("favorites.emptyHint")}`}
+            accessibilityRole="text"
+          >
             <Typography variant="h3" color="text" align="center">
               {t("favorites.empty")}
             </Typography>
@@ -228,7 +247,12 @@ export default function FavoritesScreen() {
   return (
     <PageLayout shouldShowSafeArea={true} scrollable={false}>
       <ThemedView style={styles.container} scrollable={false}>
-        <Typography variant="h1" style={styles.title}>
+        <Typography
+          variant="h1"
+          style={styles.title}
+          accessibilityRole="header"
+          accessibilityLabel={t("favorites.title")}
+        >
           {t("favorites.title")}
         </Typography>
         <FlatList
@@ -238,6 +262,11 @@ export default function FavoritesScreen() {
           numColumns={2}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContentContainer}
+          accessibilityLabel={t("favorites.title")}
+          accessibilityRole="list"
+          accessibilityHint={t("favorites.listHint", {
+            count: productData.length,
+          })}
         />
       </ThemedView>
     </PageLayout>

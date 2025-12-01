@@ -42,7 +42,8 @@
     "loading": "Cargando favoritos...",
     "remove": "Eliminar de favoritos",
     "quickAddToCart": "Agregar rápidamente al carrito",
-    "quickAddToCartHint": "Agregar este producto a tu carrito"
+    "quickAddToCartHint": "Agregar este producto a tu carrito",
+    "listHint": "Lista de {{count}} productos favoritos. Desliza para navegar."
   },
   "profile": {
     "title": "Perfil",

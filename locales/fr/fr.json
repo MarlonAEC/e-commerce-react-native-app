@@ -110,7 +110,8 @@
     "loading": "Chargement des favoris...",
     "remove": "Retirer des favoris",
     "quickAddToCart": "Ajout rapide au panier",
-    "quickAddToCartHint": "Ajouter ce produit à votre panier"
+    "quickAddToCartHint": "Ajouter ce produit à votre panier",
+    "listHint": "Liste de {{count}} produits favoris. Balayez pour parcourir."
   },
   "profile": {
     "title": "Profil",

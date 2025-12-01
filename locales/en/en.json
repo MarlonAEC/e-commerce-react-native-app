@@ -110,7 +110,8 @@
     "loading": "Loading favorites...",
     "remove": "Remove from favorites",
     "quickAddToCart": "Quick add to cart",
-    "quickAddToCartHint": "Add this product to your cart"
+    "quickAddToCartHint": "Add this product to your cart",
+    "listHint": "List of {{count}} favorite products. Swipe to browse."
   },
   "profile": {
     "title": "Profile",
