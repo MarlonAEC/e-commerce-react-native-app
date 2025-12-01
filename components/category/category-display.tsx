@@ -232,6 +232,7 @@ export function CategoryDisplay({
           originalPrice={item.originalPrice}
           price={item.price}
           isFavorite={item.isFavorite}
+          mode="shop"
           onPress={() => onProductPress?.(item)}
           onFavoritePress={() => onFavoritePress?.(item)}
           onAddToCartPress={() => onAddToCartPress?.(item)}

@@ -1,6 +1,7 @@
 import authReducer from "@/redux/auth/auth-slice";
 import cartReducer from "@/redux/cart/cart-slice";
 import categoriesReducer from "@/redux/categories/categories-slice";
+import favoritesReducer from "@/redux/favorites/favorites-slice";
 import { storeApi } from "@/services/store-api";
 import {
   combineReducers,
@@ -18,16 +19,13 @@ const rootReducer = combineReducers({
   auth: authReducer,
   categories: categoriesReducer,
   cart: cartReducer,
+  favorites: favoritesReducer,
   [storeApi.reducerPath]: storeApi.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
-  // Redux DevTools is automatically enabled in development mode
-  // For React Native, you can use:
-  // 1. React Native Debugger (recommended) - https://github.com/jhen0409/react-native-debugger
-  // 2. Flipper with Redux DevTools plugin
-  // 3. Remote Redux DevTools
+
   devTools: __DEV__,
   enhancers: (getDefaultEnhancers) =>
     getDefaultEnhancers().concat(devToolsEnhancer()),

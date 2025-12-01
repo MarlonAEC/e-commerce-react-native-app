@@ -106,7 +106,11 @@
   "favorites": {
     "title": "Favoris",
     "empty": "Aucun favori pour le moment",
-    "remove": "Retirer des favoris"
+    "emptyHint": "Ajoutez des produits à vos favoris pour les voir ici",
+    "loading": "Chargement des favoris...",
+    "remove": "Retirer des favoris",
+    "quickAddToCart": "Ajout rapide au panier",
+    "quickAddToCartHint": "Ajouter ce produit à votre panier"
   },
   "profile": {
     "title": "Profil",

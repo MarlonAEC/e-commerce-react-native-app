@@ -10,8 +10,11 @@ import {
 import { useThemedStyles } from "@/hooks/use-themed-styles";
 import { useTranslation } from "@/hooks/use-translation";
 import { FavoriteHeartIcon } from "./ui/svg-icons/favorite-heart-icon";
+import { QuickAddToCartIcon } from "./ui/svg-icons/quick-add-to-cart-icon";
 import { StarIcon } from "./ui/svg-icons/star-icon";
 import { Typography } from "./ui/typography";
+
+export type ProductTileMode = "shop" | "favorites";
 
 export type ProductTileProps = {
   /**
@@ -52,6 +55,11 @@ export type ProductTileProps = {
    */
   isFavorite?: boolean;
   /**
+   * Display mode: "shop" shows favorite button and add to cart button,
+   * "favorites" shows quick add to cart icon on image
+   */
+  mode?: ProductTileMode;
+  /**
    * Callback when product is pressed
    */
   onPress?: () => void;
@@ -63,6 +71,10 @@ export type ProductTileProps = {
    * Callback when add to cart button is pressed
    */
   onAddToCartPress?: () => void;
+  /**
+   * Callback when quick add to cart icon is pressed (favorites mode)
+   */
+  onQuickAddToCartPress?: () => void;
   /**
    * Accessibility label for the product tile
    */
@@ -83,9 +95,11 @@ export default function ProductTile({
   originalPrice,
   price,
   isFavorite = false,
+  mode = "shop",
   onPress,
   onFavoritePress,
   onAddToCartPress,
+  onQuickAddToCartPress,
   accessibilityLabel,
 }: ProductTileProps) {
   const { t } = useTranslation();
@@ -157,6 +171,24 @@ export default function ProductTile({
       shadowOpacity: 0.1,
       shadowRadius: 4,
       elevation: 2,
+    } as ViewStyle,
+    quickAddToCartButton: {
+      position: "absolute",
+      bottom: 8,
+      right: 8,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: colors.tint,
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1,
+      // Shadow for button
+      shadowColor: colors.text,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 3,
     } as ViewStyle,
     contentContainer: {
       flex: 1,
@@ -265,25 +297,43 @@ export default function ProductTile({
           </View>
         )}
 
-        {/* Favorite Button */}
-        <TouchableOpacity
-          style={styles.favoriteButton}
-          onPress={(e) => {
-            e.stopPropagation();
-            onFavoritePress?.();
-          }}
-          accessibilityRole="button"
-          accessibilityLabel={
-            isFavorite
-              ? t("shop.product.removeFromFavorites")
-              : t("shop.product.addToFavorites")
-          }
-          accessibilityHint={t("shop.product.toggleFavoriteHint")}
-        >
-          <FavoriteHeartIcon
-            fill={isFavorite ? colors.tint : colors.disabled}
-          />
-        </TouchableOpacity>
+        {/* Favorite Button (only in shop mode) */}
+        {mode === "shop" && onFavoritePress && (
+          <TouchableOpacity
+            style={styles.favoriteButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              onFavoritePress();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={
+              isFavorite
+                ? t("shop.product.removeFromFavorites")
+                : t("shop.product.addToFavorites")
+            }
+            accessibilityHint={t("shop.product.toggleFavoriteHint")}
+          >
+            <FavoriteHeartIcon
+              fill={isFavorite ? colors.tint : colors.disabled}
+            />
+          </TouchableOpacity>
+        )}
+
+        {/* Quick Add to Cart Button (only in favorites mode) */}
+        {mode === "favorites" && onQuickAddToCartPress && (
+          <TouchableOpacity
+            style={styles.quickAddToCartButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              onQuickAddToCartPress();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={t("favorites.quickAddToCart")}
+            accessibilityHint={t("favorites.quickAddToCartHint")}
+          >
+            <QuickAddToCartIcon fill={colors.background} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Product Details */}
@@ -329,8 +379,8 @@ export default function ProductTile({
           </Typography>
         </View>
 
-        {/* Add to Cart Button */}
-        {onAddToCartPress && (
+        {/* Add to Cart Button (only in shop mode) */}
+        {mode === "shop" && onAddToCartPress && (
           <TouchableOpacity
             style={styles.addToCartButton}
             onPress={(e) => {

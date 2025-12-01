@@ -38,7 +38,11 @@
   "favorites": {
     "title": "Favoritos",
     "empty": "Aún no tienes favoritos",
-    "remove": "Eliminar de favoritos"
+    "emptyHint": "Agrega algunos productos a tus favoritos para verlos aquí",
+    "loading": "Cargando favoritos...",
+    "remove": "Eliminar de favoritos",
+    "quickAddToCart": "Agregar rápidamente al carrito",
+    "quickAddToCartHint": "Agregar este producto a tu carrito"
   },
   "profile": {
     "title": "Perfil",

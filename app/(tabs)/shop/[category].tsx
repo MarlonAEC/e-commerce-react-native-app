@@ -1,3 +1,4 @@
+import { Product } from "@/@types/product";
 import {
   CategoryDisplay,
   ProductData,
@@ -5,6 +6,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux-toolkit";
 import { useTranslation } from "@/hooks/use-translation";
 import { addToCart } from "@/redux/cart/cart-slice";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "@/redux/favorites/favorites-slice";
 import { logger } from "@/services/logger";
 import {
   useGetAllProductsQuery,
@@ -13,7 +18,7 @@ import {
 import { formatCategoryName } from "@/utils/format-category-name";
 import { mapProductsFromApi } from "@/utils/map-products";
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const LIMIT = 16; // Number of products to fetch per page
 
@@ -22,6 +27,9 @@ export default function CategoryDetailScreen() {
   const { category } = useLocalSearchParams<{ category: string }>();
   const [skip, setSkip] = useState(0);
   const [allProducts, setAllProducts] = useState<ProductData[]>([]);
+  const [allProductsOriginal, setAllProductsOriginal] = useState<Product[]>(
+    []
+  );
 
   // Check if this is the "all" category
   const isAllCategory = category?.toLowerCase() === "all";
@@ -79,11 +87,19 @@ export default function CategoryDetailScreen() {
       if (skip === 0) {
         // First page - replace all products
         setAllProducts(mappedProducts);
+        setAllProductsOriginal(productsResponse.products);
       } else {
         // Subsequent pages - append products, avoiding duplicates by ID
         setAllProducts((prev) => {
           const existingIds = new Set(prev.map((p) => p.id));
           const newProducts = mappedProducts.filter(
+            (p) => !existingIds.has(p.id)
+          );
+          return [...prev, ...newProducts];
+        });
+        setAllProductsOriginal((prev) => {
+          const existingIds = new Set(prev.map((p) => p.id));
+          const newProducts = productsResponse.products.filter(
             (p) => !existingIds.has(p.id)
           );
           return [...prev, ...newProducts];
@@ -112,10 +128,55 @@ export default function CategoryDetailScreen() {
   useEffect(() => {
     setSkip(0);
     setAllProducts([]);
+    setAllProductsOriginal([]);
   }, [categorySlug]);
+
+  // Get favorites state
+  const favorites = useAppSelector((state) => state.favorites.favorites);
+
+  // Update products with favorite status
+  const productsWithFavorites = useMemo(() => {
+    return allProducts.map((product) => {
+      const productIdNum = parseInt(product.id, 10);
+      const isFav = favorites.some((p) => p.id === productIdNum);
+      return {
+        ...product,
+        isFavorite: isFav,
+      };
+    });
+  }, [allProducts, favorites]);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+
+  const handleToggleFavorite = async (product: ProductData) => {
+    const productIdNum = parseInt(product.id, 10);
+    const originalProduct = allProductsOriginal.find(
+      (p) => p.id === productIdNum
+    );
+
+    if (!originalProduct) {
+      logger.warn("Original product not found for favorite toggle", {
+        productId: product.id,
+      });
+      return;
+    }
+
+    const isFav = favorites.some((p) => p.id === productIdNum);
+
+    try {
+      if (isFav) {
+        await dispatch(removeFromFavorites(productIdNum)).unwrap();
+        logger.info("Product removed from favorites", { productId: productIdNum });
+      } else {
+        await dispatch(addToFavorites(originalProduct)).unwrap();
+        logger.info("Product added to favorites", { productId: productIdNum });
+      }
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error(String(error));
+      logger.error("Failed to toggle favorite", err, { productId: productIdNum });
+    }
+  };
 
   const handleAddToCart = async (product: ProductData) => {
     if (!user) {
@@ -177,13 +238,11 @@ export default function CategoryDetailScreen() {
   return (
     <CategoryDisplay
       title={categoryName}
-      products={allProducts}
+      products={productsWithFavorites}
       isLoading={isLoading && skip === 0} // Only show loading on initial load
       error={error ? t("shop.failedToLoadProducts") : null}
       onProductPress={(product) => console.log(`Product ${product.id} pressed`)}
-      onFavoritePress={(product) =>
-        console.log(`Favorite toggled for ${product.id}`)
-      }
+      onFavoritePress={handleToggleFavorite}
       onAddToCartPress={handleAddToCart}
       onBackPress={handleBackPress}
       hasMore={hasMore}
